@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "lucide-react";
 
 export default function ProfileHeader({ user, stats }) {
-  const displayName = user?.full_name || user?.email?.split("@")[0] || "You";
+  const displayName = user?.display_name || user?.full_name || user?.email?.split("@")[0] || "You";
   const joinedDate = user?.created_date
     ? new Date(user.created_date).toLocaleDateString("en-US", { month: "short", year: "numeric" })
     : "Aug 2026";

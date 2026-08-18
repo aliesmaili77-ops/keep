@@ -1,8 +1,18 @@
 import React from "react";
+import { ArrowLeft } from "lucide-react";
 
-export default function AuthLayout({ icon: Icon, title, subtitle, footer, children }) {
+export default function AuthLayout({ icon: Icon, title, subtitle, footer, onBack, children }) {
   return (
     <div className="min-h-screen flex flex-col bg-background px-5 pt-[max(env(safe-area-inset-top),32px)] pb-[max(env(safe-area-inset-bottom),24px)]">
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="self-start -ml-2 mb-2 w-9 h-9 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+          aria-label="Back"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+      )}
       <div className="flex flex-col items-center text-center mb-10 mt-6">
         <div
           className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary mb-5"

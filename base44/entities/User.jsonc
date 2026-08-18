@@ -16,6 +16,11 @@
       "type": "string",
       "description": "URL to user's avatar image"
     },
+    "date_of_birth": {
+      "type": "string",
+      "format": "date",
+      "description": "User's date of birth"
+    },
     "status": {
       "type": "string",
       "description": "Account status",
