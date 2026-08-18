@@ -1,0 +1,57 @@
+{
+  "properties": {
+    "keep_id": {
+      "type": "string",
+      "description": "The Keep this comment is on"
+    },
+    "circle_id": {
+      "type": "string",
+      "description": "The Circle this Keep belongs to"
+    },
+    "text": {
+      "type": "string",
+      "description": "Comment text"
+    },
+    "status": {
+      "type": "string",
+      "description": "Comment status",
+      "enum": [
+        "active",
+        "deleted"
+      ],
+      "default": "active"
+    },
+    "circle_member_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Denormalized member IDs for RLS"
+    }
+  },
+  "required": [
+    "keep_id",
+    "circle_id",
+    "text"
+  ],
+  "rls": {
+    "read": {
+      "data.circle_member_ids": "{{user.id}}"
+    },
+    "create": {
+      "data.circle_member_ids": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  },
+  "name": "Comment",
+  "type": "object"
+}

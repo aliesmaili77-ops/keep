@@ -1,0 +1,86 @@
+{
+  "properties": {
+    "circle_id": {
+      "type": "string",
+      "description": "The Circle this Keep belongs to"
+    },
+    "keep_type": {
+      "type": "string",
+      "description": "Content format",
+      "enum": [
+        "quote",
+        "memory",
+        "voice"
+      ]
+    },
+    "text": {
+      "type": "string",
+      "description": "Quote text, memory text, or voice caption"
+    },
+    "title": {
+      "type": "string",
+      "description": "Optional short title for a memory"
+    },
+    "speaker_user_id": {
+      "type": "string",
+      "description": "User ID of the original speaker (if a member)"
+    },
+    "speaker_name": {
+      "type": "string",
+      "description": "Name of the original speaker"
+    },
+    "happened_at": {
+      "type": "string",
+      "format": "date",
+      "description": "When the event happened"
+    },
+    "context": {
+      "type": "string",
+      "description": "Optional context or story behind the Keep"
+    },
+    "milestone_tag": {
+      "type": "string",
+      "description": "Optional milestone label (e.g. first trip)"
+    },
+    "status": {
+      "type": "string",
+      "description": "Keep status",
+      "enum": [
+        "active",
+        "archived"
+      ],
+      "default": "active"
+    },
+    "circle_member_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Denormalized member IDs for RLS"
+    }
+  },
+  "required": [
+    "circle_id",
+    "keep_type"
+  ],
+  "rls": {
+    "read": {
+      "data.circle_member_ids": "{{user.id}}"
+    },
+    "create": {
+      "data.circle_member_ids": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  },
+  "name": "Keep",
+  "type": "object"
+}

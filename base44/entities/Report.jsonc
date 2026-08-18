@@ -1,0 +1,65 @@
+{
+  "properties": {
+    "reported_by": {
+      "type": "string",
+      "description": "User ID of the reporter"
+    },
+    "keep_id": {
+      "type": "string",
+      "description": "Optional Keep being reported"
+    },
+    "comment_id": {
+      "type": "string",
+      "description": "Optional comment being reported"
+    },
+    "reported_user_id": {
+      "type": "string",
+      "description": "Optional user being reported"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Reason for the report",
+      "enum": [
+        "spam",
+        "harassment",
+        "inappropriate",
+        "other"
+      ]
+    },
+    "details": {
+      "type": "string",
+      "description": "Optional additional details"
+    },
+    "status": {
+      "type": "string",
+      "description": "Report status",
+      "enum": [
+        "pending",
+        "reviewed",
+        "actioned"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "reported_by",
+    "reason"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {}
+  },
+  "name": "Report",
+  "type": "object"
+}

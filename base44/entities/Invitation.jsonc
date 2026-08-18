@@ -1,0 +1,102 @@
+{
+  "properties": {
+    "circle_id": {
+      "type": "string",
+      "description": "The Circle this invitation is for"
+    },
+    "invited_by": {
+      "type": "string",
+      "description": "User ID of the inviter"
+    },
+    "invite_email": {
+      "type": "string",
+      "description": "Email address of the invitee"
+    },
+    "invite_token": {
+      "type": "string",
+      "description": "Unique token for the invitation link"
+    },
+    "related_keep_id": {
+      "type": "string",
+      "description": "Optional Keep that provides context for the invitation"
+    },
+    "status": {
+      "type": "string",
+      "description": "Invitation state",
+      "enum": [
+        "pending",
+        "accepted",
+        "expired",
+        "revoked"
+      ],
+      "default": "pending"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the invitation expires"
+    },
+    "circle_member_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Denormalized member IDs for RLS"
+    },
+    "circle_admin_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Denormalized admin IDs for RLS"
+    }
+  },
+  "required": [
+    "circle_id",
+    "invited_by",
+    "invite_email",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.circle_member_ids": "{{user.id}}"
+        },
+        {
+          "data.invite_email": "{{user.email}}"
+        }
+      ]
+    },
+    "create": {
+      "data.circle_admin_ids": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    },
+    "update": {
+      "$or": [
+        {
+          "data.circle_admin_ids": {
+            "$in": [
+              "{{user.id}}"
+            ]
+          }
+        },
+        {
+          "data.invite_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "data.circle_admin_ids": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    }
+  },
+  "name": "Invitation",
+  "type": "object"
+}

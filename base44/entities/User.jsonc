@@ -1,0 +1,35 @@
+{
+  "properties": {
+    "role": {
+      "type": "string",
+      "description": "The role of the user in the app",
+      "enum": [
+        "admin",
+        "user"
+      ]
+    },
+    "display_name": {
+      "type": "string",
+      "description": "User's chosen display name"
+    },
+    "avatar": {
+      "type": "string",
+      "description": "URL to user's avatar image"
+    },
+    "status": {
+      "type": "string",
+      "description": "Account status",
+      "enum": [
+        "active",
+        "deletion_requested",
+        "suspended"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "role"
+  ],
+  "name": "User",
+  "type": "object"
+}

@@ -1,0 +1,29 @@
+{
+  "properties": {
+    "blocker_user_id": {
+      "type": "string",
+      "description": "User ID of the blocker"
+    },
+    "blocked_user_id": {
+      "type": "string",
+      "description": "User ID of the blocked user"
+    }
+  },
+  "required": [
+    "blocker_user_id",
+    "blocked_user_id"
+  ],
+  "rls": {
+    "read": {
+      "data.blocker_user_id": "{{user.id}}"
+    },
+    "create": {
+      "data.blocker_user_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.blocker_user_id": "{{user.id}}"
+    }
+  },
+  "name": "Block",
+  "type": "object"
+}

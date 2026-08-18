@@ -1,0 +1,90 @@
+{
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Circle name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional Circle description"
+    },
+    "circle_type": {
+      "type": "string",
+      "description": "Type of relationship for onboarding guidance",
+      "enum": [
+        "close_friends",
+        "partner",
+        "family",
+        "other"
+      ],
+      "default": "close_friends"
+    },
+    "cover_image": {
+      "type": "string",
+      "description": "Optional cover image URL"
+    },
+    "member_user_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "User IDs of all active members (source of truth for RLS)"
+    },
+    "admin_user_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "User IDs of owner and admins"
+    },
+    "status": {
+      "type": "string",
+      "description": "Circle status",
+      "enum": [
+        "active",
+        "deactivated"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "name",
+    "circle_type"
+  ],
+  "rls": {
+    "read": {
+      "data.member_user_ids": "{{user.id}}"
+    },
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.admin_user_ids": {
+            "$in": [
+              "{{user.id}}"
+            ]
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.admin_user_ids": {
+            "$in": [
+              "{{user.id}}"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "name": "Circle",
+  "type": "object"
+}

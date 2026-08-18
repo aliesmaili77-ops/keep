@@ -1,0 +1,95 @@
+{
+  "properties": {
+    "circle_id": {
+      "type": "string",
+      "description": "The Circle this membership belongs to"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "The user who is a member"
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Display name snapshot at join time"
+    },
+    "role": {
+      "type": "string",
+      "description": "Member role within the Circle",
+      "enum": [
+        "owner",
+        "admin",
+        "member"
+      ],
+      "default": "member"
+    },
+    "membership_status": {
+      "type": "string",
+      "description": "Membership state",
+      "enum": [
+        "active",
+        "left",
+        "removed"
+      ],
+      "default": "active"
+    },
+    "joined_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the member joined"
+    },
+    "circle_member_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Denormalized member IDs for RLS"
+    },
+    "circle_admin_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Denormalized admin IDs for RLS"
+    }
+  },
+  "required": [
+    "circle_id",
+    "user_id",
+    "role"
+  ],
+  "rls": {
+    "read": {
+      "data.circle_member_ids": "{{user.id}}"
+    },
+    "create": {
+      "data.circle_admin_ids": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    },
+    "update": {
+      "data.circle_admin_ids": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "data.circle_admin_ids": {
+            "$in": [
+              "{{user.id}}"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "name": "CircleMember",
+  "type": "object"
+}

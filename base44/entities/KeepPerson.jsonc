@@ -1,0 +1,55 @@
+{
+  "properties": {
+    "keep_id": {
+      "type": "string",
+      "description": "The Keep this person is associated with"
+    },
+    "circle_id": {
+      "type": "string",
+      "description": "The Circle this Keep belongs to"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User ID if the person is a Circle member"
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Name of the person involved"
+    },
+    "relationship_to_keep": {
+      "type": "string",
+      "description": "Role in the Keep (e.g. speaker, involved, remembered by)"
+    },
+    "circle_member_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Denormalized member IDs for RLS"
+    }
+  },
+  "required": [
+    "keep_id",
+    "circle_id"
+  ],
+  "rls": {
+    "read": {
+      "data.circle_member_ids": "{{user.id}}"
+    },
+    "create": {
+      "data.circle_member_ids": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  },
+  "name": "KeepPerson",
+  "type": "object"
+}

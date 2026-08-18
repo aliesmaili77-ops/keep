@@ -1,0 +1,52 @@
+{
+  "properties": {
+    "keep_id": {
+      "type": "string",
+      "description": "The Keep this reaction is on"
+    },
+    "circle_id": {
+      "type": "string",
+      "description": "The Circle this Keep belongs to"
+    },
+    "reaction_type": {
+      "type": "string",
+      "description": "Type of reaction",
+      "enum": [
+        "heart",
+        "laugh",
+        "wow",
+        "sad",
+        "fire"
+      ]
+    },
+    "circle_member_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Denormalized member IDs for RLS"
+    }
+  },
+  "required": [
+    "keep_id",
+    "circle_id",
+    "reaction_type"
+  ],
+  "rls": {
+    "read": {
+      "data.circle_member_ids": "{{user.id}}"
+    },
+    "create": {
+      "data.circle_member_ids": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  },
+  "name": "Reaction",
+  "type": "object"
+}
