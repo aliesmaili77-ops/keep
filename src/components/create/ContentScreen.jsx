@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import AutoTextarea from "./AutoTextarea";
-import VoiceRecorder from "./VoiceRecorder";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
@@ -9,10 +8,8 @@ export default function ContentScreen({ initialData, onContinue }) {
   const [text, setText] = useState(initialData?.text || "");
   const [speaker, setSpeaker] = useState(initialData?.speaker_name || "");
   const [context, setContext] = useState(initialData?.context || "");
-  const [hasRecording, setHasRecording] = useState(false);
-  const [duration, setDuration] = useState(0);
 
-  const hasContent = text.trim().length > 0 || hasRecording;
+  const hasContent = text.trim().length > 0;
 
   const handleContinue = () => {
     onContinue({
@@ -20,8 +17,6 @@ export default function ContentScreen({ initialData, onContinue }) {
       text: text.trim(),
       speaker_name: speaker.trim(),
       context: context.trim(),
-      hasRecording,
-      audioDuration: duration,
     });
   };
 
@@ -75,26 +70,6 @@ export default function ContentScreen({ initialData, onContinue }) {
             className="w-full bg-transparent text-[15px] outline-none placeholder:text-muted-foreground/50 mt-2 pb-1"
           />
         </div>
-
-        {/* Voice recorder section */}
-        <div className="mt-6 pt-5 border-t border-border/40">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-            Add a voice note
-          </p>
-          <p className="text-[13px] text-muted-foreground/70 mt-0.5 mb-5">
-            A replay, an impression, or just say it in your own voice
-          </p>
-          <VoiceRecorder
-            onRecorded={(_blob, dur) => {
-              setHasRecording(true);
-              setDuration(dur);
-            }}
-            onCleared={() => {
-              setHasRecording(false);
-              setDuration(0);
-            }}
-          />
-        </div>
       </div>
 
       {/* Sticky continue */}
@@ -110,7 +85,7 @@ export default function ContentScreen({ initialData, onContinue }) {
         </Button>
         {!hasContent && (
           <p className="text-center text-xs text-muted-foreground mt-2">
-            Write something or record a voice note
+            Write something to keep
           </p>
         )}
       </div>

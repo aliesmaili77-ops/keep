@@ -10,15 +10,8 @@ export default function Create() {
   const [data, setData] = useState({});
 
   const handleContentContinue = (content) => {
-    const hasText = content.text && content.text.length > 0;
-    const hasVoice = content.hasRecording;
-    let keepType;
-    if (hasText) {
-      keepType = content.title ? "memory" : "quote";
-    } else {
-      keepType = "voice";
-    }
-    setData({ ...content, keepType, hasAttachment: hasText && hasVoice });
+    const keepType = content.title ? "memory" : "quote";
+    setData({ ...content, keepType });
     setStep(1);
   };
 

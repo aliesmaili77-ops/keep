@@ -78,15 +78,6 @@ export default function ReviewStep({ keepType, data, onKeep }) {
             <p className="text-[15px] leading-relaxed">{data.text}</p>
           )}
 
-          {data.hasRecording && (
-            <div className="mt-3 flex items-center gap-2 rounded-xl bg-primary/5 px-3 py-2.5">
-              <Mic className="w-4 h-4 text-primary" />
-              <span className="text-sm text-muted-foreground">
-                Voice note · {formatDuration(data.audioDuration || 0)}
-              </span>
-            </div>
-          )}
-
           {data.context && (
             <p className="text-xs text-muted-foreground mt-3 italic">{data.context}</p>
           )}
