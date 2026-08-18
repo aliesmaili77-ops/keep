@@ -29,10 +29,10 @@ export default function Create() {
   if (step === 2) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-5">
-        <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <Check className="w-10 h-10 text-primary" strokeWidth={2.5} />
+        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+          <Check className="w-8 h-8 text-primary" strokeWidth={2.5} />
         </div>
-        <h1 className="text-2xl font-semibold tracking-tight">Kept!</h1>
+        <h1 className="text-xl font-semibold tracking-tight">Kept!</h1>
         <p className="text-muted-foreground text-sm mt-1">Your moment is preserved</p>
       </div>
     );

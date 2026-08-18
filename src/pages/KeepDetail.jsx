@@ -66,7 +66,7 @@ export default function KeepDetail() {
         {/* Content by type */}
         {keep.keep_type === "quote" && (
           <blockquote
-            className="text-xl leading-snug text-foreground"
+            className="text-lg leading-snug text-foreground"
             dir={keep.is_rtl ? "rtl" : "ltr"}
             style={keep.is_rtl ? { textAlign: "right" } : undefined}
           >

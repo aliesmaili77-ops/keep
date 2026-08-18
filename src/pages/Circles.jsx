@@ -39,7 +39,7 @@ export default function Circles() {
   return (
     <div className="max-w-md mx-auto">
       <div className="px-5 pt-14 pb-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Circles</h1>
+        <h1 className="text-xl font-semibold tracking-tight">Circles</h1>
         <p className="text-muted-foreground text-sm mt-0.5">Your private spaces</p>
       </div>
       <div className="mt-2">

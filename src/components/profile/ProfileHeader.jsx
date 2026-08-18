@@ -13,11 +13,11 @@ export default function ProfileHeader({ user, stats }) {
     <div className="px-5 pt-14 pb-2">
       {/* Avatar + stats row */}
       <div className="flex items-center gap-6">
-        <Avatar name={displayName} size={80} className="bg-primary/15 text-primary" />
+        <Avatar name={displayName} size={72} className="bg-primary/15 text-primary" />
         <div className="flex-1 flex justify-around">
           {stats.map((s) => (
             <div key={s.label} className="text-center">
-              <p className="text-xl font-semibold">{s.value}</p>
+              <p className="text-lg font-semibold">{s.value}</p>
               <p className="text-xs text-muted-foreground">{s.label}</p>
             </div>
           ))}

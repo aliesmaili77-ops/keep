@@ -8,7 +8,7 @@ export default function SettingsList({ title, items }) {
       <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide px-5 mb-1.5">
         {title}
       </p>
-      <div className="mx-4 rounded-2xl bg-card border border-border/60 overflow-hidden">
+      <div className="mx-4 rounded-full bg-card border border-border/60 overflow-hidden">
         {items.map((item, i) => (
           <button
             key={i}

@@ -60,9 +60,9 @@ export default function ReviewStep({ keepType, data, onKeep }) {
         <p className="text-muted-foreground text-sm mt-1">Review and pick where to keep it</p>
 
         {/* Preview card */}
-        <div className="mt-5 rounded-2xl bg-card border border-border/60 p-4">
+        <div className="mt-5 rounded-full bg-card border border-border/60 p-4">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
               {TypeIcon && <TypeIcon className="w-4 h-4 text-primary" />}
             </div>
             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
@@ -93,7 +93,7 @@ export default function ReviewStep({ keepType, data, onKeep }) {
             Post to Circle <span className="text-destructive">*</span>
           </p>
           {mockCircles.length === 0 ? (
-            <div className="rounded-xl bg-muted/50 p-4 text-center">
+            <div className="rounded-full bg-muted/50 p-4 text-center">
               <p className="text-sm text-muted-foreground">You need a Circle first</p>
               <Link to="/circles" className="text-sm text-primary font-medium mt-1 inline-block">
                 Create a Circle
@@ -106,7 +106,7 @@ export default function ReviewStep({ keepType, data, onKeep }) {
                   key={c.id}
                   onClick={() => setCircleId(c.id)}
                   className={cn(
-                    "w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-left",
+                    "w-full flex items-center gap-3 p-3 rounded-full border transition-all text-left",
                     circleId === c.id
                       ? "border-primary bg-primary/5"
                       : "border-border/60 bg-card hover:bg-muted/30"
@@ -171,7 +171,7 @@ export default function ReviewStep({ keepType, data, onKeep }) {
                     value={fields[f.key]}
                     onChange={(e) => setFields((prev) => ({ ...prev, [f.key]: e.target.value }))}
                     placeholder={f.placeholder || ""}
-                    className="w-full rounded-xl border border-border/60 bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
+                    className="w-full rounded-full border border-border/60 bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
                   />
                 );
               })}
