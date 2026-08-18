@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { mockCircles } from "@/lib/mockData";
-import { Check, Calendar, MessageSquare, Users, Tag, Plus, Mic, Quote, BookOpen } from "lucide-react";
+import { Check, Calendar, Users, Tag, Plus, Mic, Quote, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const optionalFields = {
   quote: [
     { key: "happened_at", label: "When", icon: Calendar, type: "date" },
-    { key: "context", label: "Context", icon: MessageSquare, type: "text", placeholder: "Add context" },
   ],
   memory: [
     { key: "happened_at", label: "When", icon: Calendar, type: "date" },
@@ -37,7 +36,6 @@ export default function ReviewStep({ keepType, data, onKeep }) {
   const [circleId, setCircleId] = useState(data.circle_id || "");
   const [fields, setFields] = useState({
     happened_at: data.happened_at || "",
-    context: data.context || "",
     people: data.people || "",
     milestone_tag: data.milestone_tag || "",
   });
@@ -71,20 +69,28 @@ export default function ReviewStep({ keepType, data, onKeep }) {
               {typeMeta[keepType]?.label}
             </span>
           </div>
+
           {keepType === "memory" && data.title && (
             <p className="font-semibold text-[15px] mb-1">{data.title}</p>
           )}
-          {keepType === "voice" ? (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Mic className="w-4 h-4 text-primary" />
-              <span>Voice note · {formatDuration(data.audioDuration || 0)}</span>
-            </div>
-          ) : (
+
+          {data.text && (
             <p className="text-[15px] leading-relaxed">{data.text}</p>
           )}
-          {keepType === "voice" && data.text && (
-            <p className="text-sm text-muted-foreground mt-2 italic">"{data.text}"</p>
+
+          {data.hasRecording && (
+            <div className="mt-3 flex items-center gap-2 rounded-xl bg-primary/5 px-3 py-2.5">
+              <Mic className="w-4 h-4 text-primary" />
+              <span className="text-sm text-muted-foreground">
+                Voice note · {formatDuration(data.audioDuration || 0)}
+              </span>
+            </div>
           )}
+
+          {data.context && (
+            <p className="text-xs text-muted-foreground mt-3 italic">{data.context}</p>
+          )}
+
           {data.speaker_name && (
             <p className="text-xs text-muted-foreground mt-2">— {data.speaker_name}</p>
           )}
