@@ -17,6 +17,8 @@ export default function CommentInput({ onAdd }) {
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+          onFocus={() => window.dispatchEvent(new CustomEvent("nav-hide"))}
+          onBlur={() => window.dispatchEvent(new CustomEvent("nav-show"))}
           placeholder="Add a comment..."
           className="flex-1 rounded-full bg-muted px-4 py-2 text-sm outline-none placeholder:text-muted-foreground/60"
         />

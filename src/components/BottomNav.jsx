@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Home, Plus, User, History } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -14,9 +14,51 @@ const items = [
 
 export default function BottomNav() {
   const location = useLocation();
+  const [scrollHidden, setScrollHidden] = useState(false);
+  const [commentHidden, setCommentHidden] = useState(false);
+  const hidden = scrollHidden || commentHidden;
+
+  // Hide on scroll down, show on scroll up
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setScrollHidden(true);
+      } else if (currentScrollY < lastScrollY) {
+        setScrollHidden(false);
+      }
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Hide when a comment input is focused, show when blurred
+  useEffect(() => {
+    const hide = () => setCommentHidden(true);
+    const show = () => setCommentHidden(false);
+    window.addEventListener("nav-hide", hide);
+    window.addEventListener("nav-show", show);
+    return () => {
+      window.removeEventListener("nav-hide", hide);
+      window.removeEventListener("nav-show", show);
+    };
+  }, []);
+
+  // Reset on route change
+  useEffect(() => {
+    setScrollHidden(false);
+  }, [location.pathname]);
+
   return (
     <nav
-      className="fixed left-1/2 -translate-x-1/2 z-50"
+      className={cn(
+        "fixed left-1/2 -translate-x-1/2 z-50 transition-transform duration-300 ease-out",
+        hidden && "translate-y-[calc(100%+24px)]"
+      )}
       style={{ bottom: "max(env(safe-area-inset-bottom), 12px)" }}
       aria-label="Main navigation"
     >
