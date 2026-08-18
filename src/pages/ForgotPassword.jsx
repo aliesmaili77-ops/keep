@@ -54,7 +54,7 @@ export default function ForgotPassword() {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="pl-10 h-11"
+                className="pl-10 h-10"
                 required
               />
             </div>

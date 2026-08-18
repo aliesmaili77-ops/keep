@@ -157,7 +157,7 @@ export default function Register() {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="pl-10 h-11"
+                className="pl-10 h-10"
                 required
               />
             </div>
@@ -205,7 +205,7 @@ export default function Register() {
                 placeholder="At least 6 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="pl-10 h-11"
+                className="pl-10 h-10"
                 required
               />
             </div>
@@ -253,7 +253,7 @@ export default function Register() {
                 placeholder="Your name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="pl-10 h-11"
+                className="pl-10 h-10"
                 required
               />
             </div>
@@ -273,7 +273,7 @@ export default function Register() {
                 type="date"
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
-                className="pl-10 h-11"
+                className="pl-10 h-10"
               />
             </div>
           </div>
