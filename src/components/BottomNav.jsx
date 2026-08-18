@@ -1,12 +1,13 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Users, Plus, User } from "lucide-react";
+import { Home, Users, Plus, User, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const items = [
   { to: "/", icon: Home, label: "Home" },
   { to: "/circles", icon: Users, label: "Circles" },
   { to: "/create", icon: Plus, label: "Keep", primary: true },
+  { to: "/memories", icon: Sparkles, label: "Memories" },
   { to: "/profile", icon: User, label: "Profile" },
 ];
 
@@ -28,7 +29,7 @@ export default function BottomNav() {
                 key={item.to}
                 to={item.to}
                 aria-label={item.label}
-                className="flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground transition-transform active:scale-95 ml-1"
+                className="flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground transition-transform active:scale-95 mx-1"
               >
                 <Icon className="w-6 h-6" strokeWidth={2.2} />
               </NavLink>
