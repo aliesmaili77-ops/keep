@@ -14,7 +14,6 @@ import { safeReturnTo } from "@/lib/authReturnTo";
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
@@ -23,10 +22,6 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
     setLoading(true);
     try {
       await base44.auth.register({ email, password });
@@ -128,8 +123,8 @@ export default function Register() {
   return (
     <AuthLayout
       icon={UserPlus}
-      title="Create your account"
-      subtitle="Sign up to get started"
+      title="Join Keep"
+      subtitle="Start preserving your shared moments"
       footer={
         <>
           Already have an account?{" "}
@@ -156,7 +151,7 @@ export default function Register() {
           <div className="w-full border-t border-border" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-3 text-muted-foreground">or</span>
+          <span className="bg-background px-3 text-muted-foreground">or</span>
         </div>
       </div>
 
@@ -195,22 +190,6 @@ export default function Register() {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="pl-10 h-12"
-              required
-            />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="confirm">Confirm Password</Label>
-          <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
-            <Input
-              id="confirm"
-              type="password"
-              autoComplete="new-password"
-              placeholder="••••••••"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
               className="pl-10 h-12"
               required
             />
