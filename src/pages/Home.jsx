@@ -1,14 +1,35 @@
 import React from "react";
+import KeepCard from "@/components/keep/KeepCard";
+import { mockKeeps, resurfacedKeep, formatKeepDate } from "@/lib/mockData";
+import { Sparkles } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="px-5 pt-14 pb-4">
-      <h1 className="text-2xl font-semibold tracking-tight">Keeps</h1>
-      <p className="text-muted-foreground text-sm mt-1">Recent memories from all your Circles</p>
-      <div className="mt-24 text-center">
-        <p className="text-muted-foreground text-sm">
-          No Keeps yet. Create a Circle to start keeping what happens.
-        </p>
+    <div className="max-w-md mx-auto">
+      <div className="px-5 pt-14 pb-2">
+        <h1 className="text-2xl font-semibold tracking-tight">Keeps</h1>
+        <p className="text-muted-foreground text-sm mt-0.5">Recent memories from all your Circles</p>
+      </div>
+
+      {/* Resurfacing */}
+      <button
+        className="mx-5 mt-3 flex items-center gap-3 w-[calc(100%-2.5rem)] px-4 py-3 rounded-2xl bg-muted/40 border border-border/50 text-left hover:bg-muted/60 transition-colors"
+        aria-label="Remember this? An old keep from The Boys"
+      >
+        <Sparkles className="w-4 h-4 text-primary shrink-0" />
+        <div className="min-w-0">
+          <p className="text-xs font-medium text-primary">Remember this?</p>
+          <p className="text-sm text-muted-foreground truncate">
+            "{resurfacedKeep.text}" — {resurfacedKeep.circle_name}, {formatKeepDate(resurfacedKeep.happened_at)}
+          </p>
+        </div>
+      </button>
+
+      {/* Feed */}
+      <div className="mt-2">
+        {mockKeeps.map((keep) => (
+          <KeepCard key={keep.id} keep={keep} />
+        ))}
       </div>
     </div>
   );
