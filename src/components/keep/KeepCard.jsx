@@ -5,7 +5,7 @@ import ReactionRow from "@/components/keep/ReactionRow";
 import { formatKeepDate } from "@/lib/mockData";
 import { Milestone } from "lucide-react";
 
-export default function KeepCard({ keep }) {
+export default function KeepCard({ keep, onClick }) {
   const displayName = keep.speaker_name || keep.kept_by;
   const subtitle =
     keep.keep_type === "voice"
@@ -15,7 +15,7 @@ export default function KeepCard({ keep }) {
       : null;
 
   return (
-    <article className="px-5 py-5 border-b border-border/50">
+    <article onClick={onClick} className="px-5 py-5 border-b border-border/50 cursor-pointer hover:bg-muted/20 transition-colors">
       {/* Header */}
       <div className="flex items-center gap-2.5 mb-3">
         <Avatar name={displayName} size={36} />

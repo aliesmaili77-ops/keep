@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import SettingsList from "@/components/profile/SettingsList";
-import ProfileCircles from "@/components/profile/ProfileCircles";
+import KeepsGrid from "@/components/profile/KeepsGrid";
 import {
   Bell,
   Shield,
@@ -24,9 +24,8 @@ export default function Profile() {
   const [darkMode, setDarkMode] = useState(false);
 
   const stats = [
+    { label: "Keeps", value: 23 },
     { label: "Circles", value: 4 },
-    { label: "Keeps created", value: 23 },
-    { label: "Keeps kept", value: 41 },
   ];
 
   const accountItems = [
@@ -69,13 +68,15 @@ export default function Profile() {
   return (
     <div className="max-w-md mx-auto pb-32">
       <ProfileHeader user={user} stats={stats} />
-      <ProfileCircles />
+      <KeepsGrid />
 
-      <SettingsList title="Account" items={accountItems} />
-      <SettingsList title="Notifications" items={notificationItems} />
-      <SettingsList title="Privacy & Safety" items={privacyItems} />
-      <SettingsList title="Appearance" items={appearanceItems} />
-      <SettingsList title="Support" items={supportItems} />
+      <div className="mt-6">
+        <SettingsList title="Account" items={accountItems} />
+        <SettingsList title="Notifications" items={notificationItems} />
+        <SettingsList title="Privacy & Safety" items={privacyItems} />
+        <SettingsList title="Appearance" items={appearanceItems} />
+        <SettingsList title="Support" items={supportItems} />
+      </div>
 
       {/* Log out */}
       <div className="mt-5 mx-4">

@@ -1,9 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import KeepCard from "@/components/keep/KeepCard";
 import { mockKeeps, resurfacedKeep, formatKeepDate } from "@/lib/mockData";
 import { Sparkles } from "lucide-react";
 
 export default function Home() {
+  const navigate = useNavigate();
+
   return (
     <div className="max-w-md mx-auto">
       <div className="px-5 pt-14 pb-2">
@@ -13,6 +16,7 @@ export default function Home() {
 
       {/* Resurfacing */}
       <button
+        onClick={() => navigate(`/keep/${resurfacedKeep.id}`)}
         className="mx-5 mt-3 flex items-center gap-3 w-[calc(100%-2.5rem)] px-4 py-3 rounded-2xl bg-muted/40 border border-border/50 text-left hover:bg-muted/60 transition-colors"
         aria-label="Remember this? An old keep from The Boys"
       >
@@ -28,7 +32,11 @@ export default function Home() {
       {/* Feed */}
       <div className="mt-2">
         {mockKeeps.map((keep) => (
-          <KeepCard key={keep.id} keep={keep} />
+          <KeepCard
+            key={keep.id}
+            keep={keep}
+            onClick={() => navigate(`/keep/${keep.id}`)}
+          />
         ))}
       </div>
     </div>
