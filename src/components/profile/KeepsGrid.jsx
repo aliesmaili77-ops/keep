@@ -20,7 +20,7 @@ export default function KeepsGrid() {
           <button
             key={keep.id}
             onClick={() => navigate(`/keep/${keep.id}`)}
-            className="rounded-full bg-card border border-border/60 p-3 text-left hover:bg-muted/30 transition-colors flex flex-col min-h-[120px]"
+            className="rounded-2xl bg-card border border-border/60 p-3 text-left hover:bg-muted/30 transition-colors flex flex-col min-h-[120px]"
           >
             <div className="flex items-center gap-1.5 mb-2">
               <Icon className="w-3.5 h-3.5 text-primary shrink-0" />
