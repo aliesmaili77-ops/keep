@@ -17,6 +17,7 @@ import ForgotPassword from '@/pages/ForgotPassword';
 import ResetPassword from '@/pages/ResetPassword';
 import Home from '@/pages/Home';
 import Circles from '@/pages/Circles';
+import People from '@/pages/People';
 import Create from '@/pages/Create';
 import Memories from '@/pages/Memories';
 import Profile from '@/pages/Profile';
@@ -61,6 +62,7 @@ const AuthenticatedApp = () => {
         <Route element={<AppShell />}>
           <Route path="/" element={<Home />} />
           <Route path="/circles" element={<Circles />} />
+          <Route path="/people" element={<People />} />
           <Route path="/create" element={<Create />} />
           <Route path="/memories" element={<Memories />} />
           <Route path="/profile" element={<Profile />} />

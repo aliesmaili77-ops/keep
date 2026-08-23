@@ -4,7 +4,8 @@ import Avatar from "@/components/Avatar";
 import { useCircles } from "@/hooks/useCircles";
 import EmptyState from "@/components/common/EmptyState";
 import CreateCircleSheet from "@/components/circles/CreateCircleSheet";
-import { Users, Plus, Loader2 } from "lucide-react";
+import InviteSheet from "@/components/circles/InviteSheet";
+import { Users, Plus, UserPlus, Loader2 } from "lucide-react";
 
 const typeLabels = {
   close_friends: "Close friends",
@@ -17,6 +18,7 @@ export default function Circles() {
   const navigate = useNavigate();
   const { data: circles, isLoading } = useCircles();
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [inviteOpen, setInviteOpen] = useState(false);
 
   return (
     <div className="max-w-md mx-auto">
@@ -25,13 +27,22 @@ export default function Circles() {
           <h1 className="text-xl font-semibold tracking-tight">Circles</h1>
           <p className="text-muted-foreground text-sm mt-0.5">Your private spaces</p>
         </div>
-        <button
-          onClick={() => setSheetOpen(true)}
-          className="w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center active:scale-95 transition-transform"
-          aria-label="Create Circle"
-        >
-          <Plus className="w-5 h-5" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setInviteOpen(true)}
+            className="w-9 h-9 rounded-full glass-tight flex items-center justify-center active:scale-95 transition-transform"
+            aria-label="Add Friends"
+          >
+            <UserPlus className="w-5 h-5 text-primary" />
+          </button>
+          <button
+            onClick={() => setSheetOpen(true)}
+            className="w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center active:scale-95 transition-transform"
+            aria-label="Create Circle"
+          >
+            <Plus className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
       {isLoading ? (
@@ -73,6 +84,7 @@ export default function Circles() {
       )}
 
       <CreateCircleSheet open={sheetOpen} onOpenChange={setSheetOpen} />
+      <InviteSheet open={inviteOpen} onOpenChange={setInviteOpen} />
     </div>
   );
 }

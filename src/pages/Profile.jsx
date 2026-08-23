@@ -7,7 +7,7 @@ import SettingsList from "@/components/profile/SettingsList";
 import KeepsGrid from "@/components/profile/KeepsGrid";
 import { useTheme } from "@/lib/ThemeContext";
 import { useKeeps } from "@/hooks/useKeeps";
-import { useCircles } from "@/hooks/useCircles";
+import { usePeople } from "@/hooks/usePeople";
 import {
   Bell,
   Shield,
@@ -28,11 +28,11 @@ export default function Profile() {
   const navigate = useNavigate();
   const { mode, setTheme, toggleTheme, isDark } = useTheme();
   const { data: keeps } = useKeeps();
-  const { data: circles } = useCircles();
+  const { data: people } = usePeople();
 
   const stats = [
     { label: "Keeps", value: keeps?.length || 0 },
-    { label: "Circles", value: circles?.length || 0 },
+    { label: "People", value: people?.filter((p) => p.user_id !== user?.id).length || 0 },
   ];
 
   const accountItems = [

@@ -11,7 +11,7 @@ export default function ProfileHeader({ user, stats }) {
     ? new Date(user.created_date).toLocaleDateString("en-US", { month: "short", year: "numeric" })
     : "Aug 2026";
 
-  const statRoutes = { Keeps: "/memories", Circles: "/circles" };
+  const statRoutes = { Keeps: "/memories", People: "/people" };
 
   return (
     <div className="px-4 pt-14 pb-2">
