@@ -1,6 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 
-export function useTheme() {
+const ThemeContext = createContext(null);
+
+export function ThemeProvider({ children }) {
   const [mode, setMode] = useState(() => {
     if (typeof window === "undefined") return "system";
     const stored = localStorage.getItem("theme-mode");
@@ -36,5 +38,24 @@ export function useTheme() {
     setMode((m) => (m === "dark" ? "light" : "dark"));
   }, []);
 
-  return { mode, setTheme, toggleTheme, isDark, systemDark };
+  return (
+    <ThemeContext.Provider value={{ mode, setTheme, toggleTheme, isDark, systemDark }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+export function useTheme() {
+  const ctx = useContext(ThemeContext);
+  if (!ctx) {
+    // Fallback so components rendered outside the provider don't crash
+    return {
+      mode: "system",
+      setTheme: () => {},
+      toggleTheme: () => {},
+      isDark: false,
+      systemDark: false,
+    };
+  }
+  return ctx;
 }

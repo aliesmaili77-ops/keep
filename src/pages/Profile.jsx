@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import SettingsList from "@/components/profile/SettingsList";
 import KeepsGrid from "@/components/profile/KeepsGrid";
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from "@/lib/ThemeContext";
 import { useKeeps } from "@/hooks/useKeeps";
 import { useCircles } from "@/hooks/useCircles";
 import {
