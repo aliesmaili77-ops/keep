@@ -1,0 +1,45 @@
+{
+  "properties": {
+    "owner_user_id": {
+      "type": "string",
+      "description": "The user who owns this connection"
+    },
+    "connected_user_id": {
+      "type": "string",
+      "description": "The user who is connected"
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Display name snapshot of the connected user"
+    },
+    "status": {
+      "type": "string",
+      "description": "Connection status",
+      "enum": [
+        "active",
+        "pending"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "owner_user_id",
+    "connected_user_id"
+  ],
+  "rls": {
+    "read": {
+      "data.owner_user_id": "{{user.id}}"
+    },
+    "create": {
+      "data.owner_user_id": "{{user.id}}"
+    },
+    "update": {
+      "data.owner_user_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.owner_user_id": "{{user.id}}"
+    }
+  },
+  "name": "Connection",
+  "type": "object"
+}

@@ -2,7 +2,7 @@
   "properties": {
     "circle_id": {
       "type": "string",
-      "description": "The Circle this invitation is for"
+      "description": "The Circle this invitation is for (null for standalone connection invites)"
     },
     "invited_by": {
       "type": "string",
@@ -41,18 +41,17 @@
       "items": {
         "type": "string"
       },
-      "description": "Denormalized member IDs for RLS"
+      "description": "Denormalized member IDs for RLS (includes inviter for standalone)"
     },
     "circle_admin_ids": {
       "type": "array",
       "items": {
         "type": "string"
       },
-      "description": "Denormalized admin IDs for RLS"
+      "description": "Denormalized admin IDs for RLS (includes inviter for standalone)"
     }
   },
   "required": [
-    "circle_id",
     "invited_by",
     "invite_email",
     "status"

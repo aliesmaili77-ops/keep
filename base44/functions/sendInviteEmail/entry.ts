@@ -12,16 +12,29 @@ export default async function(req) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const subject = inviterName + ' invited you to join ' + circleName + ' on Keep';
-    const emailBody = [
-      'Hi,',
-      '',
-      inviterName + ' invited you to join "' + circleName + '" on Keep — a private space for your closest people to preserve the inside jokes, meaningful quotes, and shared stories that group chats always forget.',
-      '',
-      'Tap here to join: ' + inviteLink,
-      '',
-      'Keep'
-    ].join('\n');
+    const subject = circleName
+      ? inviterName + ' invited you to join ' + circleName + ' on Keep'
+      : inviterName + ' invited you to join them on Keep';
+
+    const emailBody = circleName
+      ? [
+          'Hi,',
+          '',
+          inviterName + ' invited you to join "' + circleName + '" on Keep — a private space for your closest people to preserve the inside jokes, meaningful quotes, and shared stories that group chats always forget.',
+          '',
+          'Tap here to join: ' + inviteLink,
+          '',
+          'Keep'
+        ].join('\n')
+      : [
+          'Hi,',
+          '',
+          inviterName + ' invited you to join them on Keep — a private space for your closest people to preserve the inside jokes, meaningful quotes, and shared stories that group chats always forget.',
+          '',
+          'Tap here to connect: ' + inviteLink,
+          '',
+          'Keep'
+        ].join('\n');
 
     await base44.asServiceRole.integrations.Core.SendEmail({
       to,

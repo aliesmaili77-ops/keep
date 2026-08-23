@@ -25,6 +25,51 @@ export default async function(req) {
       return Response.json({ error: 'This invitation has expired' }, { status: 400 });
     }
 
+    // Standalone invitation (no Circle) — create a bidirectional Connection
+    if (!invitation.circle_id) {
+      const inviterId = invitation.invited_by;
+      const inviteeName = user.full_name || (user.email ? user.email.split('@')[0] : 'Someone');
+      const inviterName = invitation.invited_by || 'Someone';
+
+      // Check if connection already exists
+      const existing = await base44.asServiceRole.entities.Connection.filter({
+        owner_user_id: inviterId,
+        connected_user_id: user.id
+      });
+      if (!existing || existing.length === 0) {
+        // Create bidirectional connection
+        await base44.asServiceRole.entities.Connection.create({
+          owner_user_id: inviterId,
+          connected_user_id: user.id,
+          display_name: inviteeName,
+          status: 'active'
+        });
+        await base44.asServiceRole.entities.Connection.create({
+          owner_user_id: user.id,
+          connected_user_id: inviterId,
+          display_name: inviterName,
+          status: 'active'
+        });
+
+        // Create notification for the inviter
+        await base44.asServiceRole.entities.Notification.create({
+          recipient_id: inviterId,
+          actor_user_id: user.id,
+          actor_name: inviteeName,
+          type: 'connection_added',
+          title: inviteeName + ' added to your people',
+          body: 'Start sharing moments together.',
+          cta_label: 'Start sharing',
+          cta_route: '/create',
+          read: false
+        });
+      }
+
+      await base44.asServiceRole.entities.Invitation.update(invitation.id, { status: 'accepted' });
+      return Response.json({ connection: true, joined: true });
+    }
+
+    // Circle invitation — existing flow
     const circle = await base44.asServiceRole.entities.Circle.get(invitation.circle_id);
     if (!circle) {
       return Response.json({ error: 'Circle not found' }, { status: 404 });
@@ -48,7 +93,7 @@ export default async function(req) {
       membership_status: 'active',
       joined_at: new Date().toISOString(),
       circle_member_ids: newMemberIds,
-      circle_admin_ids: adminIds,
+      circle_admin_ids: adminIds
     });
 
     // Update Circle's member list

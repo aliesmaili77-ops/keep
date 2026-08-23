@@ -12,6 +12,7 @@ export default function Invite() {
   const { isLoadingAuth, user } = useAuth();
   const [status, setStatus] = useState("loading");
   const [circle, setCircle] = useState(null);
+  const [connection, setConnection] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
@@ -33,6 +34,7 @@ export default function Invite() {
       try {
         const res = await base44.functions.invoke("acceptInvite", { token });
         setCircle(res.data.circle);
+        setConnection(res.data.connection);
         setStatus(res.data.alreadyMember ? "already" : "success");
       } catch (e) {
         const msg = e?.response?.data?.error || e?.message || "Something went wrong";
@@ -55,6 +57,22 @@ export default function Invite() {
   }
 
   if (status === "success" || status === "already") {
+    if (connection && !circle) {
+      return (
+        <div className="min-h-screen flex flex-col items-center justify-center px-5 text-center">
+          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+            <CheckCircle className="w-8 h-8 text-primary" strokeWidth={2} />
+          </div>
+          <h1 className="text-xl font-semibold tracking-tight">You're connected!</h1>
+          <p className="text-muted-foreground text-sm mt-1">
+            You've been added to their people on Keep.
+          </p>
+          <Button className="mt-6" size="lg" onClick={() => navigate("/")}>
+            Get Started
+          </Button>
+        </div>
+      );
+    }
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-5 text-center">
         <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">

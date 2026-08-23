@@ -83,7 +83,14 @@ export default function Circles() {
         </div>
       )}
 
-      <CreateCircleSheet open={sheetOpen} onOpenChange={setSheetOpen} />
+      <CreateCircleSheet
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
+        onAddPeople={() => {
+          setSheetOpen(false);
+          setInviteOpen(true);
+        }}
+      />
       <InviteSheet open={inviteOpen} onOpenChange={setInviteOpen} />
     </div>
   );

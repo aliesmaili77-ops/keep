@@ -1,0 +1,64 @@
+{
+  "properties": {
+    "recipient_id": {
+      "type": "string",
+      "description": "User who receives the notification"
+    },
+    "actor_user_id": {
+      "type": "string",
+      "description": "User who triggered the notification"
+    },
+    "actor_name": {
+      "type": "string",
+      "description": "Display name of the actor"
+    },
+    "type": {
+      "type": "string",
+      "description": "Notification type",
+      "enum": [
+        "connection_added",
+        "connection_followup",
+        "circle_invite_accepted"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "description": "Notification title"
+    },
+    "body": {
+      "type": "string",
+      "description": "Notification body text"
+    },
+    "cta_label": {
+      "type": "string",
+      "description": "Call-to-action button label"
+    },
+    "cta_route": {
+      "type": "string",
+      "description": "Route to navigate to when CTA is tapped"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the notification has been read"
+    }
+  },
+  "required": [
+    "recipient_id",
+    "type"
+  ],
+  "rls": {
+    "read": {
+      "data.recipient_id": "{{user.id}}"
+    },
+    "create": {},
+    "update": {
+      "data.recipient_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.recipient_id": "{{user.id}}"
+    }
+  },
+  "name": "Notification",
+  "type": "object"
+}
