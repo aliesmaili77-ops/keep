@@ -22,6 +22,7 @@ import Memories from '@/pages/Memories';
 import Profile from '@/pages/Profile';
 import KeepDetail from '@/pages/KeepDetail';
 import CircleDetail from '@/pages/CircleDetail';
+import Invite from '@/pages/Invite';
 import Privacy from '@/pages/Privacy';
 import Terms from '@/pages/Terms';
 
@@ -53,6 +54,7 @@ const AuthenticatedApp = () => {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
+      <Route path="/invite" element={<Invite />} />
 
       {/* Protected routes */}
       <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/welcome" replace />} />}>

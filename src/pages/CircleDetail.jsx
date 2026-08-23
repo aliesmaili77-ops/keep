@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Avatar from "@/components/Avatar";
 import KeepCard from "@/components/keep/KeepCard";
 import EmptyState from "@/components/common/EmptyState";
+import InviteSheet from "@/components/circles/InviteSheet";
 import { ArrowLeft, Crown, Shield, Trash2, UserPlus, Loader2, Users } from "lucide-react";
 
 const typeLabels = {
@@ -28,6 +29,7 @@ export default function CircleDetail() {
   const invalidateCircles = useInvalidateCircles();
   const invalidateMembers = useInvalidateCircleMembers();
   const [busy, setBusy] = useState(null);
+  const [inviteOpen, setInviteOpen] = useState(false);
 
   const circle = circles?.find((c) => c.id === id);
   const isAdmin = circle?.admin_user_ids?.includes(user?.id);
@@ -115,7 +117,10 @@ export default function CircleDetail() {
             Members
           </p>
           {isAdmin && (
-            <button className="text-xs text-primary font-medium flex items-center gap-1">
+            <button
+              onClick={() => setInviteOpen(true)}
+              className="text-xs text-primary font-medium flex items-center gap-1"
+            >
               <UserPlus className="w-3.5 h-3.5" /> Invite
             </button>
           )}
@@ -197,6 +202,7 @@ export default function CircleDetail() {
           ))
         )}
       </div>
+      <InviteSheet open={inviteOpen} onOpenChange={setInviteOpen} circle={circle} />
     </div>
   );
 }
