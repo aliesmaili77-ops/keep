@@ -12,6 +12,7 @@ import { useInvalidateCircleMembers } from "@/hooks/useCircleMembers";
 import { invalidatePeople } from "@/hooks/usePeople";
 import { useQueryClient } from "@tanstack/react-query";
 import InviteOptions from "@/components/circles/InviteOptions";
+import ShareOptions from "@/components/circles/ShareOptions";
 import {
   Loader2,
   ArrowLeft,
@@ -19,7 +20,6 @@ import {
   Plus,
   CheckCircle2,
   Mail,
-  Link as LinkIcon,
 } from "lucide-react";
 
 const typeOptions = [
@@ -28,6 +28,8 @@ const typeOptions = [
   { value: "family", label: "Family" },
   { value: "other", label: "Other" },
 ];
+
+const genToken = () => crypto.randomUUID().replace(/-/g, "").slice(0, 16);
 
 export default function InviteSheet({ open, onOpenChange, circle: fixedCircle }) {
   const { user } = useAuth();
@@ -43,21 +45,25 @@ export default function InviteSheet({ open, onOpenChange, circle: fixedCircle })
   const [circleType, setCircleType] = useState("close_friends");
   const [creating, setCreating] = useState(false);
   const [newCircle, setNewCircle] = useState(null);
+  const [shareToken, setShareToken] = useState(null);
 
-  // Invitation for link/code/QR sharing
+  // Invitation for link/code/QR sharing (fixed circle + done step)
   const [invitation, setInvitation] = useState(null);
   const [invitationLoading, setInvitationLoading] = useState(false);
 
   const circle = fixedCircle || newCircle;
 
   useEffect(() => {
-    if (open && circle && !invitation) {
-      createInvitation();
-    }
-    if (!open) {
+    if (open) {
+      if (fixedCircle && !invitation) {
+        createInvitation();
+      } else if (!fixedCircle && !shareToken) {
+        setShareToken(genToken());
+      }
+    } else {
       reset();
     }
-  }, [open, circle]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const reset = () => {
     setStep("people");
@@ -67,12 +73,13 @@ export default function InviteSheet({ open, onOpenChange, circle: fixedCircle })
     setCircleType("close_friends");
     setNewCircle(null);
     setInvitation(null);
+    setShareToken(null);
   };
 
   const createInvitation = async () => {
     setInvitationLoading(true);
     try {
-      const token = crypto.randomUUID().replace(/-/g, "").slice(0, 16);
+      const token = genToken();
       const expiresAt = new Date();
       expiresAt.setDate(expiresAt.getDate() + 7);
       const inv = await base44.entities.Invitation.create({
@@ -127,12 +134,28 @@ export default function InviteSheet({ open, onOpenChange, circle: fixedCircle })
         circle_admin_ids: [user.id],
       });
 
+      // Create the share invitation with the pre-generated token
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + 7);
+      const shareInv = await base44.entities.Invitation.create({
+        circle_id: created.id,
+        invited_by: user.id,
+        invite_email: "",
+        invite_token: shareToken,
+        status: "pending",
+        expires_at: expiresAt.toISOString(),
+        circle_member_ids: [user.id],
+        circle_admin_ids: [user.id],
+      });
+      setInvitation(shareInv);
+
+      // Send email invites to each added person
       const inviterName = user.full_name || user.email?.split("@")[0] || "Someone";
       await Promise.all(
         emails.map(async (em) => {
-          const token = crypto.randomUUID().replace(/-/g, "").slice(0, 16);
-          const expiresAt = new Date();
-          expiresAt.setDate(expiresAt.getDate() + 7);
+          const token = genToken();
+          const emailExpiresAt = new Date();
+          emailExpiresAt.setDate(emailExpiresAt.getDate() + 7);
           const inviteLink = `${window.location.origin}/invite?token=${token}`;
           await base44.entities.Invitation.create({
             circle_id: created.id,
@@ -140,7 +163,7 @@ export default function InviteSheet({ open, onOpenChange, circle: fixedCircle })
             invite_email: em,
             invite_token: token,
             status: "pending",
-            expires_at: expiresAt.toISOString(),
+            expires_at: emailExpiresAt.toISOString(),
             circle_member_ids: [user.id],
             circle_admin_ids: [user.id],
           });
@@ -219,10 +242,12 @@ export default function InviteSheet({ open, onOpenChange, circle: fixedCircle })
         </SheetHeader>
 
         {step === "people" && (
-          <div className="mt-5 space-y-4">
+          <div className="mt-5 space-y-5">
             <p className="text-sm text-muted-foreground">
-              Add people by email. You'll create a Circle with them next.
+              Add people by email, or share a link, code, or QR. You'll create a Circle with them next.
             </p>
+
+            {/* Email input */}
             <div className="flex items-center gap-2">
               <div className="flex-1 flex items-center gap-2 glass-tight rounded-full px-4 py-2.5">
                 <Mail className="w-4 h-4 text-muted-foreground shrink-0" />
@@ -265,6 +290,9 @@ export default function InviteSheet({ open, onOpenChange, circle: fixedCircle })
               </div>
             )}
 
+            {/* Share options (link, code, QR) — all together in the same step */}
+            {shareToken && <ShareOptions token={shareToken} circleName="" />}
+
             <button
               onClick={() => setStep("circle")}
               className="w-full rounded-full bg-primary text-primary-foreground py-3 text-sm font-medium active:scale-95 transition-transform"
@@ -272,26 +300,6 @@ export default function InviteSheet({ open, onOpenChange, circle: fixedCircle })
               {emails.length > 0
                 ? `Continue with ${emails.length} ${emails.length === 1 ? "person" : "people"}`
                 : "Continue"}
-            </button>
-
-            <div className="flex items-center gap-3">
-              <div className="flex-1 h-px bg-border/50" />
-              <span className="text-xs text-muted-foreground">or</span>
-              <div className="flex-1 h-px bg-border/50" />
-            </div>
-
-            <button
-              onClick={() => setStep("circle")}
-              className="w-full glass-tight rounded-2xl px-4 py-3.5 flex items-center gap-3 active:scale-[0.98] transition-transform text-left"
-            >
-              <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                <LinkIcon className="w-4.5 h-4.5 text-primary" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium">Share a link, code, or QR</p>
-                <p className="text-xs text-muted-foreground">Create a Circle to get your share options</p>
-              </div>
-              <ArrowLeft className="w-4 h-4 text-muted-foreground rotate-180 shrink-0" />
             </button>
           </div>
         )}
