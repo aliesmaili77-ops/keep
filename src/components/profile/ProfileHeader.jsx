@@ -14,48 +14,50 @@ export default function ProfileHeader({ user, stats }) {
   const statRoutes = { Keeps: "/memories", Circles: "/circles" };
 
   return (
-    <div className="px-5 pt-14 pb-2">
-      {/* Avatar + stats */}
-      <div className="flex items-center gap-5">
-        <Avatar
-          name={displayName}
-          size={80}
-          className="bg-primary/15 text-primary ring-4 ring-primary/5"
-        />
-        <div className="flex-1 flex justify-around">
-          {stats.map((s) => {
-            const route = statRoutes[s.label];
-            return (
-              <button
-                key={s.label}
-                onClick={() => route && navigate(route)}
-                className="flex flex-col items-center group"
-              >
-                <span className="text-xl font-bold tracking-tight group-hover:text-primary transition-colors">
-                  {s.value}
-                </span>
-                <span className="text-xs text-muted-foreground">{s.label}</span>
-              </button>
-            );
-          })}
+    <div className="px-4 pt-14 pb-2">
+      <div className="glass rounded-3xl p-5">
+        {/* Avatar + stats */}
+        <div className="flex items-center gap-5">
+          <Avatar
+            name={displayName}
+            size={80}
+            className="bg-primary/15 text-primary ring-4 ring-primary/5"
+          />
+          <div className="flex-1 flex justify-around">
+            {stats.map((s) => {
+              const route = statRoutes[s.label];
+              return (
+                <button
+                  key={s.label}
+                  onClick={() => route && navigate(route)}
+                  className="flex flex-col items-center group"
+                >
+                  <span className="text-xl font-bold tracking-tight group-active:scale-95 transition-transform">
+                    {s.value}
+                  </span>
+                  <span className="text-xs text-muted-foreground">{s.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      {/* Name + bio */}
-      <div className="mt-4">
-        <h1 className="text-lg font-bold tracking-tight">{displayName}</h1>
-        <p className="text-sm text-muted-foreground">{user?.email}</p>
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1.5">
-          <Calendar className="w-3 h-3" />
-          <span>Joined {joinedDate}</span>
+        {/* Name + bio */}
+        <div className="mt-4">
+          <h1 className="text-lg font-bold tracking-tight">{displayName}</h1>
+          <p className="text-sm text-muted-foreground">{user?.email}</p>
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1.5">
+            <Calendar className="w-3 h-3" />
+            <span>Joined {joinedDate}</span>
+          </div>
         </div>
-      </div>
 
-      {/* Action button */}
-      <Button variant="secondary" className="w-full mt-4" size="sm">
-        <Pencil className="w-3.5 h-3.5" />
-        Edit Profile
-      </Button>
+        {/* Action button */}
+        <Button variant="secondary" className="w-full mt-4" size="sm">
+          <Pencil className="w-3.5 h-3.5" />
+          Edit Profile
+        </Button>
+      </div>
     </div>
   );
 }

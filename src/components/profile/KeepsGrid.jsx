@@ -13,14 +13,14 @@ export default function KeepsGrid() {
   const navigate = useNavigate();
 
   return (
-    <div className="grid grid-cols-2 gap-2 px-4 mt-4">
+    <div className="grid grid-cols-2 gap-2.5 px-4 mt-4">
       {mockKeeps.map((keep) => {
         const Icon = typeIcon[keep.keep_type] || Quote;
         return (
           <button
             key={keep.id}
             onClick={() => navigate(`/keep/${keep.id}`)}
-            className="rounded-2xl bg-card border border-border/60 p-3 text-left hover:bg-muted/30 transition-colors flex flex-col min-h-[120px]"
+            className="glass-tight rounded-3xl p-3.5 text-left flex flex-col min-h-[120px] active:scale-[0.98] transition-transform"
           >
             <div className="flex items-center gap-1.5 mb-2">
               <Icon className="w-3.5 h-3.5 text-primary shrink-0" />

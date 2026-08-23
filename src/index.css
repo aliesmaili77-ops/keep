@@ -90,3 +90,20 @@
     @apply bg-background text-foreground font-body;
   }
 }
+
+@layer components {
+  .glass {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: hsl(var(--card) / 0.35);
+    border: 1px solid hsl(var(--foreground) / 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 hsl(var(--foreground) / 0.06);
+  }
+  .glass-tight {
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    background: hsl(var(--card) / 0.3);
+    border: 1px solid hsl(var(--foreground) / 0.07);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 hsl(var(--foreground) / 0.05);
+  }
+}

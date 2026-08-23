@@ -84,7 +84,7 @@ export default function Profile() {
 
       {/* Search */}
       <div className="mt-6 mx-4">
-        <div className="flex items-center gap-2 rounded-full bg-muted/60 border border-border/40 px-4 py-2.5">
+        <div className="glass-tight flex items-center gap-2 rounded-full px-4 py-2.5">
           <Search className="w-4 h-4 text-muted-foreground shrink-0" />
           <input
             type="text"
@@ -104,14 +104,13 @@ export default function Profile() {
 
       {/* Log out */}
       <div className="mt-5 mx-4">
-        <Button
-          variant="outline"
-          className="w-full"
+        <button
+          className="glass-tight w-full rounded-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-destructive active:scale-[0.98] transition-transform"
           onClick={() => logout()}
         >
           <LogOut className="w-4 h-4" />
           Log out
-        </Button>
+        </button>
       </div>
 
       <p className="text-center text-xs text-muted-foreground mt-6">Keep v1.0.0</p>

@@ -9,7 +9,7 @@ export default function SettingsList({ title, items }) {
       <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide px-5 mb-1.5">
         {title}
       </p>
-      <div className="mx-4 rounded-2xl bg-card border border-border/60 overflow-hidden">
+      <div className="glass mx-4 rounded-3xl overflow-hidden">
         {items.map((item, i) => {
           const isToggle = item.toggle;
           const Tag = isToggle || !item.onClick ? "div" : "button";
@@ -19,16 +19,16 @@ export default function SettingsList({ title, items }) {
               onClick={!isToggle ? item.onClick : undefined}
               className={cn(
                 "w-full flex items-center gap-3 px-3.5 py-3 text-left",
-                i > 0 && "border-t border-border/40",
-                !isToggle && item.onClick && "hover:bg-muted/50 active:bg-muted transition-colors",
-                item.danger && "hover:bg-destructive/5",
+                i > 0 && "border-t border-foreground/5",
+                !isToggle && item.onClick && "hover:bg-foreground/5 active:bg-foreground/10 transition-colors",
+                item.danger && "hover:bg-destructive/10",
                 item.disabled && "opacity-50 pointer-events-none"
               )}
             >
               <div
                 className={cn(
                   "w-8 h-8 rounded-full flex items-center justify-center shrink-0",
-                  item.danger ? "bg-destructive/10" : "bg-primary/10"
+                  item.danger ? "bg-destructive/15" : "bg-primary/10"
                 )}
               >
                 <item.icon
