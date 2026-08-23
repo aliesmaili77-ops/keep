@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { Loader2 } from "lucide-react";
 
-export default function CommentInput({ onAdd }) {
+export default function CommentInput({ onAdd, disabled }) {
   const [text, setText] = useState("");
 
   const handleSubmit = () => {
-    if (!text.trim()) return;
+    if (!text.trim() || disabled) return;
     onAdd(text.trim());
     setText("");
   };
@@ -24,10 +25,10 @@ export default function CommentInput({ onAdd }) {
         />
         <button
           onClick={handleSubmit}
-          disabled={!text.trim()}
-          className="text-primary font-semibold text-sm disabled:opacity-40 px-2 shrink-0"
+          disabled={!text.trim() || disabled}
+          className="text-primary font-semibold text-sm disabled:opacity-40 px-2 shrink-0 flex items-center gap-1"
         >
-          Post
+          {disabled ? <Loader2 className="w-4 h-4 animate-spin" /> : "Post"}
         </button>
       </div>
     </div>
