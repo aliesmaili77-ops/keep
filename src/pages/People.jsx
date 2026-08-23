@@ -25,10 +25,10 @@ export default function People() {
         </div>
         <button
           onClick={() => setInviteOpen(true)}
-          className="rounded-full bg-primary text-primary-foreground flex items-center gap-1.5 px-4 py-2 text-sm font-medium active:scale-95 transition-transform"
+          className="w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center active:scale-95 transition-transform"
+          aria-label="Add People"
         >
-          <UserPlus className="w-4 h-4" />
-          Add People
+          <UserPlus className="w-5 h-5" />
         </button>
       </div>
 
