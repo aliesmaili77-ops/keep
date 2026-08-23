@@ -50,6 +50,7 @@ export default function SettingsList({ title, items }) {
               <Switch
                 checked={item.toggleValue}
                 onCheckedChange={item.onToggle}
+                disabled={item.toggleDisabled}
                 className="shrink-0"
               />
             ) : (

@@ -10,6 +10,7 @@ import {
   Bell,
   Shield,
   Moon,
+  Sun,
   HelpCircle,
   FileText,
   Lock,
@@ -23,7 +24,7 @@ import {
 export default function Profile() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const { isDark, toggleTheme } = useTheme();
+  const { mode, setTheme, toggleTheme, isDark } = useTheme();
 
   const stats = [
     { label: "Keeps", value: 23 },
@@ -54,11 +55,19 @@ export default function Profile() {
 
   const appearanceItems = [
     {
+      label: "Use system setting",
+      icon: Sun,
+      toggle: true,
+      toggleValue: mode === "system",
+      onToggle: () => setTheme(mode === "system" ? (isDark ? "dark" : "light") : "system"),
+    },
+    {
       label: "Dark mode",
       icon: Moon,
       toggle: true,
       toggleValue: isDark,
       onToggle: toggleTheme,
+      toggleDisabled: mode === "system",
     },
   ];
 
