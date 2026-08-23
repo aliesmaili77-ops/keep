@@ -74,23 +74,50 @@ export default function KeepDetail() {
   });
 
   const handleToggleReaction = (type) => {
-    toggleReaction.mutate({
-      keepId: id,
-      circleId: keep.circle_id,
-      type,
-      circleMemberIds,
-      existingId: myReactionIds[type],
-    });
+    toggleReaction.mutate(
+      {
+        keepId: id,
+        circleId: keep.circle_id,
+        type,
+        circleMemberIds,
+        existingId: myReactionIds[type],
+      },
+      {
+        onSuccess: () => {
+          // Only notify on add, not remove
+          if (!myReactionIds[type]) {
+            base44.functions
+              .invoke("notifyKeepInteraction", {
+                keep_id: id,
+                interaction_type: "reaction",
+              })
+              .catch(() => {});
+          }
+        },
+      }
+    );
   };
 
   const handleAddComment = (text) => {
-    addComment.mutate({
-      keepId: id,
-      circleId: keep.circle_id,
-      text,
-      circleMemberIds,
-      displayName: user?.full_name,
-    });
+    addComment.mutate(
+      {
+        keepId: id,
+        circleId: keep.circle_id,
+        text,
+        circleMemberIds,
+        displayName: user?.full_name,
+      },
+      {
+        onSuccess: () => {
+          base44.functions
+            .invoke("notifyKeepInteraction", {
+              keep_id: id,
+              interaction_type: "comment",
+            })
+            .catch(() => {});
+        },
+      }
+    );
   };
 
   const handleDelete = async () => {

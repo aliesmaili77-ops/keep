@@ -18,6 +18,11 @@ function resolveNotificationRoute(notification) {
       return notification.circle_id ? `/circle/${notification.circle_id}` : "/circles";
     case "connection_followup":
       return "/create";
+    case "comment_added":
+    case "reaction_added":
+      return notification.cta_route || null;
+    case "keep_reminder":
+      return "/create";
     default:
       return null;
   }

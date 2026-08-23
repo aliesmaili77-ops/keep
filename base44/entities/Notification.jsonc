@@ -18,7 +18,10 @@
       "enum": [
         "connection_added",
         "connection_followup",
-        "circle_invite_accepted"
+        "circle_invite_accepted",
+        "comment_added",
+        "reaction_added",
+        "keep_reminder"
       ]
     },
     "title": {

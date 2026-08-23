@@ -67,6 +67,21 @@ export default async function(req) {
             read: false
           });
         }
+
+        // Follow-up nudge to share their first moment (respects keep_reminders pref)
+        if (inviterPrefs.keep_reminders !== false) {
+          await base44.asServiceRole.entities.Notification.create({
+            recipient_id: inviterId,
+            actor_user_id: user.id,
+            actor_name: inviteeName,
+            type: 'connection_followup',
+            title: 'Share your first moment with ' + inviteeName,
+            body: 'You just connected. Keep a memory or quote to get started.',
+            cta_label: 'Add a Keep',
+            cta_route: '/create',
+            read: false
+          });
+        }
       }
 
       await base44.asServiceRole.entities.Invitation.update(invitation.id, { status: 'accepted' });
