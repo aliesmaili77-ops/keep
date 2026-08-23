@@ -20,6 +20,7 @@ export default function ProfileHeader({ user, stats, onEdit }) {
         <div className="flex items-center gap-5">
           <Avatar
             name={displayName}
+            src={user?.avatar || undefined}
             size={80}
             className="bg-primary/15 text-primary ring-4 ring-primary/5"
           />
