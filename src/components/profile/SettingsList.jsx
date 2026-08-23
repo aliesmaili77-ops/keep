@@ -10,59 +10,61 @@ export default function SettingsList({ title, items }) {
         {title}
       </p>
       <div className="mx-4 rounded-2xl bg-card border border-border/60 overflow-hidden">
-        {items.map((item, i) => (
-          <div
-            key={i}
-            className={cn(
-              "w-full flex items-center gap-3 px-3.5 py-2.5",
-              i > 0 && "border-t border-border/40",
-              item.danger
-                ? "hover:bg-destructive/5"
-                : "hover:bg-muted/50",
-              item.disabled && "opacity-50 pointer-events-none"
-            )}
-          >
-            <div
+        {items.map((item, i) => {
+          const isToggle = item.toggle;
+          const Tag = isToggle || !item.onClick ? "div" : "button";
+          return (
+            <Tag
+              key={i}
+              onClick={!isToggle ? item.onClick : undefined}
               className={cn(
-                "w-8 h-8 rounded-full flex items-center justify-center shrink-0",
-                item.danger
-                  ? "bg-destructive/10"
-                  : "bg-primary/10"
+                "w-full flex items-center gap-3 px-3.5 py-3 text-left",
+                i > 0 && "border-t border-border/40",
+                !isToggle && item.onClick && "hover:bg-muted/50 active:bg-muted transition-colors",
+                item.danger && "hover:bg-destructive/5",
+                item.disabled && "opacity-50 pointer-events-none"
               )}
             >
-              <item.icon
+              <div
                 className={cn(
-                  "w-[17px] h-[17px]",
-                  item.danger ? "text-destructive" : "text-primary"
+                  "w-8 h-8 rounded-full flex items-center justify-center shrink-0",
+                  item.danger ? "bg-destructive/10" : "bg-primary/10"
                 )}
-                strokeWidth={2}
-              />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className={cn("text-sm font-medium", item.danger && "text-destructive")}>
-                {item.label}
-              </p>
-              {item.subtext && (
-                <p className="text-xs text-muted-foreground truncate mt-0.5">{item.subtext}</p>
+              >
+                <item.icon
+                  className={cn(
+                    "w-[17px] h-[17px]",
+                    item.danger ? "text-destructive" : "text-primary"
+                  )}
+                  strokeWidth={2}
+                />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className={cn("text-sm font-medium", item.danger && "text-destructive")}>
+                  {item.label}
+                </p>
+                {item.subtext && (
+                  <p className="text-xs text-muted-foreground truncate mt-0.5">{item.subtext}</p>
+                )}
+              </div>
+              {isToggle ? (
+                <Switch
+                  checked={item.toggleValue}
+                  onCheckedChange={item.onToggle}
+                  disabled={item.toggleDisabled}
+                  className="shrink-0"
+                />
+              ) : (
+                <>
+                  {item.trailing !== undefined ? (
+                    <span className="text-sm text-muted-foreground shrink-0">{item.trailing}</span>
+                  ) : null}
+                  <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+                </>
               )}
-            </div>
-            {item.toggle ? (
-              <Switch
-                checked={item.toggleValue}
-                onCheckedChange={item.onToggle}
-                disabled={item.toggleDisabled}
-                className="shrink-0"
-              />
-            ) : (
-              <>
-                {item.trailing !== undefined ? (
-                  <span className="text-sm text-muted-foreground shrink-0">{item.trailing}</span>
-                ) : null}
-                <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
-              </>
-            )}
-          </div>
-        ))}
+            </Tag>
+          );
+        })}
       </div>
     </div>
   );
