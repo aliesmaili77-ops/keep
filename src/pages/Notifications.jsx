@@ -9,6 +9,20 @@ import Avatar from "@/components/Avatar";
 import EmptyState from "@/components/common/EmptyState";
 import { Bell, ArrowLeft } from "lucide-react";
 
+function resolveNotificationRoute(notification) {
+  if (notification.cta_route) return notification.cta_route;
+  switch (notification.type) {
+    case "connection_added":
+      return "/people";
+    case "circle_invite_accepted":
+      return notification.circle_id ? `/circle/${notification.circle_id}` : "/circles";
+    case "connection_followup":
+      return "/create";
+    default:
+      return null;
+  }
+}
+
 export default function Notifications() {
   const navigate = useNavigate();
   const { data: notifications, isLoading } = useNotifications();
@@ -24,6 +38,8 @@ export default function Notifications() {
 
   const handleTap = (notification) => {
     if (!notification.read) markRead.mutate(notification.id);
+    const route = resolveNotificationRoute(notification);
+    if (route) navigate(route);
   };
 
   return (

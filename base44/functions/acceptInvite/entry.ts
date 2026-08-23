@@ -117,6 +117,23 @@ export default async function(req) {
       { $addToSet: { circle_member_ids: user.id } }
     );
 
+    // Notify the circle owner/admins that someone joined
+    const joinerName = user.full_name || (user.email ? user.email.split('@')[0] : 'Someone');
+    const notifyRecipients = adminIds.length > 0 ? adminIds : (circle.member_user_ids || []);
+    if (notifyRecipients.length > 0) {
+      await base44.asServiceRole.entities.Notification.create({
+        recipient_id: notifyRecipients[0],
+        actor_user_id: user.id,
+        actor_name: joinerName,
+        type: 'circle_invite_accepted',
+        title: joinerName + ' joined ' + (circle.name || 'your Circle'),
+        body: 'They can now see and add Keeps to this Circle.',
+        cta_label: 'Open Circle',
+        cta_route: '/circle/' + circle.id,
+        read: false
+      });
+    }
+
     // Mark invitation as accepted
     await base44.asServiceRole.entities.Invitation.update(invitation.id, { status: 'accepted' });
 

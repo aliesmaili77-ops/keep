@@ -107,34 +107,85 @@ export default function CreateCircleSheet({ open, onOpenChange, onAddPeople }) {
     }
   };
 
-  // ---- No people guard ----
+  // ---- No people: allow empty circle, prompt to invite afterward ----
   if (!isLoading && visiblePeople.length === 0) {
     return (
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent
           side="bottom"
-          className="rounded-t-3xl px-5 pb-8 pt-4"
+          className="rounded-t-3xl px-5 pb-8 pt-4 max-h-[85vh] overflow-y-auto"
         >
           <SheetHeader>
-            <SheetTitle>Add People First</SheetTitle>
+            <SheetTitle>Create a Circle</SheetTitle>
           </SheetHeader>
-          <div className="mt-5 flex flex-col items-center text-center py-4">
-            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-              <Users className="w-7 h-7 text-primary" />
+          <div className="mt-5 space-y-4">
+            <div>
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                Name
+              </label>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. The Boys"
+                className="w-full mt-1.5 rounded-full border border-border/60 bg-card px-4 py-2.5 text-sm outline-none focus:border-primary"
+              />
             </div>
-            <p className="text-sm text-muted-foreground max-w-xs">
-              You need connections before creating a Circle. Add people first, then create a Circle with them.
-            </p>
-            <button
-              onClick={() => {
-                onOpenChange(false);
-                onAddPeople?.();
-              }}
-              className="mt-5 w-full rounded-full bg-primary text-primary-foreground py-3 text-sm font-medium active:scale-95 transition-transform flex items-center justify-center gap-2"
+            <div>
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                Type
+              </label>
+              <div className="flex flex-wrap gap-2 mt-1.5">
+                {typeOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setCircleType(opt.value)}
+                    className={`px-3.5 py-2 rounded-full text-sm font-medium border transition-all ${
+                      circleType === opt.value
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border/60 bg-card text-muted-foreground"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="glass-tight rounded-2xl p-4 flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                <Users className="w-6 h-6 text-primary" />
+              </div>
+              <p className="text-sm font-medium">No connections yet</p>
+              <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+                You can create this Circle now and invite people to join it afterward.
+              </p>
+              <button
+                onClick={() => {
+                  onOpenChange(false);
+                  onAddPeople?.();
+                }}
+                className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-4 py-2 text-sm font-medium active:scale-95 transition-transform"
+              >
+                <UserPlus className="w-4 h-4" />
+                Invite People
+              </button>
+            </div>
+
+            <Button
+              className="w-full"
+              size="lg"
+              disabled={!name.trim() || saving}
+              onClick={handleCreate}
             >
-              <UserPlus className="w-4 h-4" />
-              Add People
-            </button>
+              {saving ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                "Create Circle"
+              )}
+            </Button>
           </div>
         </SheetContent>
       </Sheet>
