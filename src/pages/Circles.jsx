@@ -6,6 +6,7 @@ import EmptyState from "@/components/common/EmptyState";
 import CreateCircleSheet from "@/components/circles/CreateCircleSheet";
 import InviteSheet from "@/components/circles/InviteSheet";
 import { Users, Plus, UserPlus, Loader2 } from "lucide-react";
+import MotionCard from "@/components/common/MotionCard";
 
 const typeLabels = {
   close_friends: "Close friends",
@@ -66,10 +67,10 @@ export default function Circles() {
       ) : (
         <div className="mt-2">
           {circles.map((circle) => (
-            <button
+            <MotionCard
               key={circle.id}
               onClick={() => navigate(`/circle/${circle.id}`)}
-              className="flex items-center gap-3 w-full px-5 py-4 border-b border-border/50 hover:bg-muted/30 transition-colors text-left"
+              className="flex items-center gap-3 w-full px-5 py-4 border-b border-border/50 hover:bg-muted/30 transition-colors text-left cursor-pointer"
             >
               <Avatar name={circle.name} size={44} className="bg-primary/15 text-primary" />
               <div className="flex-1 min-w-0">
@@ -78,7 +79,7 @@ export default function Circles() {
                   {typeLabels[circle.circle_type]} · {(circle.member_user_ids || []).length} members
                 </p>
               </div>
-            </button>
+            </MotionCard>
           ))}
         </div>
       )}

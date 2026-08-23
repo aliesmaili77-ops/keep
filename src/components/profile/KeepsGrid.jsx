@@ -4,6 +4,7 @@ import { useKeeps } from "@/hooks/useKeeps";
 import { useCircles } from "@/hooks/useCircles";
 import EmptyState from "@/components/common/EmptyState";
 import { Quote, BookOpen, Mic, Bookmark } from "lucide-react";
+import MotionCard from "@/components/common/MotionCard";
 
 const typeIcon = { quote: Quote, memory: BookOpen, voice: Mic };
 
@@ -44,10 +45,10 @@ export default function KeepsGrid() {
       {keeps.map((keep) => {
         const Icon = typeIcon[keep.keep_type] || Quote;
         return (
-          <button
+          <MotionCard
             key={keep.id}
             onClick={() => navigate(`/keep/${keep.id}`)}
-            className="glass-tight rounded-3xl p-3.5 text-left flex flex-col min-h-[120px] active:scale-[0.98] transition-transform"
+            className="glass-tight rounded-3xl p-3.5 text-left flex flex-col min-h-[120px] cursor-pointer"
           >
             <div className="flex items-center gap-1.5 mb-2">
               <Icon className="w-3.5 h-3.5 text-primary shrink-0" />
@@ -61,7 +62,7 @@ export default function KeepsGrid() {
             <p className="text-[10px] text-muted-foreground mt-2 truncate">
               {circleMap[keep.circle_id]}
             </p>
-          </button>
+          </MotionCard>
         );
       })}
     </div>

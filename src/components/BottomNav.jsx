@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { motion, useReducedMotion } from "framer-motion";
 import { Home, Plus, User, History } from "lucide-react";
 import { cn } from "@/lib/utils";
 import CirclesIcon from "@/components/CirclesIcon";
+
+const springPill = { type: "spring", stiffness: 400, damping: 32 };
 
 const items = [
   { to: "/", icon: Home, label: "Home" },
@@ -15,6 +18,7 @@ const items = [
 export default function BottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
+  const reduced = useReducedMotion();
   const [scrollHidden, setScrollHidden] = useState(false);
   const [commentHidden, setCommentHidden] = useState(false);
   const hidden = scrollHidden || commentHidden;
@@ -76,33 +80,42 @@ export default function BottomNav() {
           };
           if (item.primary) {
             return (
-              <button
+              <motion.button
                 key={item.to}
                 onClick={handleClick}
                 aria-label={item.label}
-                className="flex items-center justify-center w-11 h-11 rounded-full bg-primary text-primary-foreground transition-transform active:scale-95 mx-0.5"
+                whileTap={reduced ? undefined : { scale: 0.9 }}
+                className="flex items-center justify-center w-11 h-11 rounded-full bg-primary text-primary-foreground transition-transform mx-0.5"
                 style={{
                   boxShadow:
                     "0 4px 16px -2px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.25)",
                 }}
               >
                 <Icon className="w-5 h-5" strokeWidth={2.2} />
-              </button>
+              </motion.button>
             );
           }
           return (
-            <button
+            <motion.button
               key={item.to}
               onClick={handleClick}
               aria-label={item.label}
               aria-current={active ? "page" : undefined}
+              whileTap={reduced ? undefined : { scale: 0.88 }}
               className={cn(
-                "flex items-center justify-center w-10 h-10 rounded-full transition-colors",
-                active ? "text-primary bg-primary/10" : "text-muted-foreground"
+                "relative flex items-center justify-center w-10 h-10 rounded-full transition-colors",
+                active ? "text-primary" : "text-muted-foreground"
               )}
             >
-              <Icon className="w-[18px] h-[18px]" strokeWidth={active ? 2.4 : 2} />
-            </button>
+              {active && (
+                <motion.div
+                  layoutId="navActivePill"
+                  className="absolute inset-0 rounded-full bg-primary/10"
+                  transition={reduced ? { duration: 0 } : springPill}
+                />
+              )}
+              <Icon className="relative z-10 w-[18px] h-[18px]" strokeWidth={active ? 2.4 : 2} />
+            </motion.button>
           );
         })}
       </div>

@@ -6,6 +6,7 @@ import Avatar from "@/components/Avatar";
 import EmptyState from "@/components/common/EmptyState";
 import InviteSheet from "@/components/circles/InviteSheet";
 import { UserPlus, Users, Loader2 } from "lucide-react";
+import MotionCard from "@/components/common/MotionCard";
 
 export default function People() {
   const { user } = useAuth();
@@ -57,7 +58,7 @@ export default function People() {
               .map((id) => circleNameMap.get(id))
               .filter(Boolean);
             return (
-              <div
+              <MotionCard
                 key={person.user_id}
                 className="glass rounded-2xl p-3.5 flex items-center gap-3"
               >
@@ -79,7 +80,7 @@ export default function People() {
                     </div>
                   )}
                 </div>
-              </div>
+              </MotionCard>
             );
           })}
         </div>

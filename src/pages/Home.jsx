@@ -61,7 +61,7 @@ export default function Home() {
           {resurfaced && (
             <button
               onClick={() => navigate(`/keep/${resurfaced.id}`)}
-              className="mx-5 mt-3 flex items-center gap-3 w-[calc(100%-2.5rem)] px-4 py-3 rounded-2xl bg-primary/10 border border-primary/20 text-left hover:bg-primary/15 transition-colors shadow-sm"
+              className="mx-5 mt-3 flex items-center gap-3 w-[calc(100%-2.5rem)] px-4 py-3 rounded-2xl bg-primary/10 border border-primary/20 text-left hover:bg-primary/15 transition-all active:scale-[0.98] shadow-sm"
             >
               <Sparkles className="w-4 h-4 text-primary shrink-0" />
               <div className="min-w-0">

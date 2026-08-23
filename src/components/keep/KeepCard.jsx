@@ -4,6 +4,7 @@ import VoicePlayer from "@/components/keep/VoicePlayer";
 import ReactionRow from "@/components/keep/ReactionRow";
 import { formatKeepDate, isRTLText } from "@/lib/keepUtils";
 import { Milestone } from "lucide-react";
+import MotionCard from "@/components/common/MotionCard";
 
 export default function KeepCard({ keep, circleName, currentUserId, onClick }) {
   const displayName =
@@ -12,7 +13,7 @@ export default function KeepCard({ keep, circleName, currentUserId, onClick }) {
   const showKeptByYou = keep.created_by_id === currentUserId && keep.speaker_name;
 
   return (
-    <article
+    <MotionCard
       onClick={onClick}
       className="px-5 py-5 border-b border-border/50 cursor-pointer hover:bg-muted/20 transition-colors"
     >
@@ -80,6 +81,6 @@ export default function KeepCard({ keep, circleName, currentUserId, onClick }) {
 
       {/* Reactions */}
       <ReactionRow reactions={[]} commentCount={0} />
-    </article>
+    </MotionCard>
   );
 }
