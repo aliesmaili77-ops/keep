@@ -30,6 +30,24 @@
         "suspended"
       ],
       "default": "active"
+    },
+    "notification_prefs": {
+      "type": "object",
+      "description": "User's notification preferences",
+      "properties": {
+        "keep_reminders": {
+          "type": "boolean",
+          "default": true
+        },
+        "circle_activity": {
+          "type": "boolean",
+          "default": true
+        },
+        "reactions_comments": {
+          "type": "boolean",
+          "default": true
+        }
+      }
     }
   },
   "required": [

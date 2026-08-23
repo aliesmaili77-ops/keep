@@ -4,7 +4,7 @@ import Avatar from "@/components/Avatar";
 import { Button } from "@/components/ui/button";
 import { Calendar, Pencil } from "lucide-react";
 
-export default function ProfileHeader({ user, stats }) {
+export default function ProfileHeader({ user, stats, onEdit }) {
   const navigate = useNavigate();
   const displayName = user?.display_name || user?.full_name || user?.email?.split("@")[0] || "You";
   const joinedDate = user?.created_date
@@ -53,7 +53,7 @@ export default function ProfileHeader({ user, stats }) {
         </div>
 
         {/* Action button */}
-        <Button variant="secondary" className="w-full mt-4" size="sm">
+        <Button variant="secondary" className="w-full mt-4" size="sm" onClick={onEdit}>
           <Pencil className="w-3.5 h-3.5" />
           Edit Profile
         </Button>
