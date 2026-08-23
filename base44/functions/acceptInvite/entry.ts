@@ -51,18 +51,22 @@ export default async function(req) {
           status: 'active'
         });
 
-        // Create notification for the inviter
-        await base44.asServiceRole.entities.Notification.create({
-          recipient_id: inviterId,
-          actor_user_id: user.id,
-          actor_name: inviteeName,
-          type: 'connection_added',
-          title: inviteeName + ' added to your people',
-          body: 'Start sharing moments together.',
-          cta_label: 'Start sharing',
-          cta_route: '/create',
-          read: false
-        });
+        // Create notification for the inviter (respect their preferences)
+        const inviter = await base44.asServiceRole.entities.User.get(inviterId).catch(() => null);
+        const inviterPrefs = inviter?.notification_prefs || {};
+        if (inviterPrefs.circle_activity !== false) {
+          await base44.asServiceRole.entities.Notification.create({
+            recipient_id: inviterId,
+            actor_user_id: user.id,
+            actor_name: inviteeName,
+            type: 'connection_added',
+            title: inviteeName + ' added to your people',
+            body: 'Start sharing moments together.',
+            cta_label: 'Start sharing',
+            cta_route: '/create',
+            read: false
+          });
+        }
       }
 
       await base44.asServiceRole.entities.Invitation.update(invitation.id, { status: 'accepted' });
@@ -117,21 +121,25 @@ export default async function(req) {
       { $addToSet: { circle_member_ids: user.id } }
     );
 
-    // Notify the circle owner/admins that someone joined
+    // Notify the circle owner/admins that someone joined (respect their preferences)
     const joinerName = user.full_name || (user.email ? user.email.split('@')[0] : 'Someone');
     const notifyRecipients = adminIds.length > 0 ? adminIds : (circle.member_user_ids || []);
     if (notifyRecipients.length > 0) {
-      await base44.asServiceRole.entities.Notification.create({
-        recipient_id: notifyRecipients[0],
-        actor_user_id: user.id,
-        actor_name: joinerName,
-        type: 'circle_invite_accepted',
-        title: joinerName + ' joined ' + (circle.name || 'your Circle'),
-        body: 'They can now see and add Keeps to this Circle.',
-        cta_label: 'Open Circle',
-        cta_route: '/circle/' + circle.id,
-        read: false
-      });
+      const recipient = await base44.asServiceRole.entities.User.get(notifyRecipients[0]).catch(() => null);
+      const recipientPrefs = recipient?.notification_prefs || {};
+      if (recipientPrefs.circle_activity !== false) {
+        await base44.asServiceRole.entities.Notification.create({
+          recipient_id: notifyRecipients[0],
+          actor_user_id: user.id,
+          actor_name: joinerName,
+          type: 'circle_invite_accepted',
+          title: joinerName + ' joined ' + (circle.name || 'your Circle'),
+          body: 'They can now see and add Keeps to this Circle.',
+          cta_label: 'Open Circle',
+          cta_route: '/circle/' + circle.id,
+          read: false
+        });
+      }
     }
 
     // Mark invitation as accepted
