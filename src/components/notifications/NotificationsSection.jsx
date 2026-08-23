@@ -16,8 +16,7 @@ export default function NotificationsSection() {
 
   const unread = (notifications || []).filter((n) => !n.read);
   const recent = (notifications || []).slice(0, 5);
-
-  if (!notifications || notifications.length === 0) return null;
+  const isEmpty = !notifications || notifications.length === 0;
 
   const handleCta = (n) => {
     if (!n.read) markRead.mutate(n.id);
@@ -51,41 +50,50 @@ export default function NotificationsSection() {
         )}
       </div>
       <div className="space-y-2">
-        {recent.map((n) => (
-          <div
-            key={n.id}
-            onClick={() => handleTap(n)}
-            className={`glass-tight rounded-2xl p-3 flex items-start gap-2.5 transition-all ${
-              !n.read ? "ring-1 ring-primary/20" : ""
-            }`}
-          >
-            <Avatar
-              name={n.actor_name || "Keep"}
-              size={32}
-              className="bg-primary/15 text-primary shrink-0"
-            />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium leading-tight">{n.title}</p>
-              {n.body && (
-                <p className="text-xs text-muted-foreground mt-0.5 leading-tight">{n.body}</p>
-              )}
-              {n.cta_label && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCta(n);
-                  }}
-                  className="mt-1.5 inline-flex items-center rounded-full bg-primary/10 text-primary px-2.5 py-1 text-xs font-medium active:scale-95 transition-transform"
-                >
-                  {n.cta_label}
-                </button>
+        {isEmpty ? (
+          <div className="glass-tight rounded-2xl p-3 flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+              <Bell className="w-4 h-4 text-primary" />
+            </div>
+            <p className="text-sm text-muted-foreground">No new notifications</p>
+          </div>
+        ) : (
+          recent.map((n) => (
+            <div
+              key={n.id}
+              onClick={() => handleTap(n)}
+              className={`glass-tight rounded-2xl p-3 flex items-start gap-2.5 transition-all ${
+                !n.read ? "ring-1 ring-primary/20" : ""
+              }`}
+            >
+              <Avatar
+                name={n.actor_name || "Keep"}
+                size={32}
+                className="bg-primary/15 text-primary shrink-0"
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium leading-tight">{n.title}</p>
+                {n.body && (
+                  <p className="text-xs text-muted-foreground mt-0.5 leading-tight">{n.body}</p>
+                )}
+                {n.cta_label && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCta(n);
+                    }}
+                    className="mt-1.5 inline-flex items-center rounded-full bg-primary/10 text-primary px-2.5 py-1 text-xs font-medium active:scale-95 transition-transform"
+                  >
+                    {n.cta_label}
+                  </button>
+                )}
+              </div>
+              {!n.read && (
+                <div className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-1.5" />
               )}
             </div>
-            {!n.read && (
-              <div className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-1.5" />
-            )}
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
