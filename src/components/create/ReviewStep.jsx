@@ -1,23 +1,17 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { mockCircles } from "@/lib/mockData";
-import { Check, Calendar, Users, Tag, Plus, Mic, Quote, BookOpen } from "lucide-react";
+import { useCircles } from "@/hooks/useCircles";
+import { Check, Calendar, Tag, Plus, Mic, Quote, BookOpen, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const optionalFields = {
-  quote: [
-    { key: "happened_at", label: "When", icon: Calendar, type: "date" },
-  ],
+  quote: [{ key: "happened_at", label: "When", icon: Calendar, type: "date" }],
   memory: [
     { key: "happened_at", label: "When", icon: Calendar, type: "date" },
-    { key: "people", label: "People", icon: Users, type: "text", placeholder: "Who was there" },
     { key: "milestone_tag", label: "Milestone", icon: Tag, type: "text", placeholder: "e.g. first trip" },
   ],
-  voice: [
-    { key: "happened_at", label: "When", icon: Calendar, type: "date" },
-    { key: "people", label: "People", icon: Users, type: "text", placeholder: "Who's in it" },
-  ],
+  voice: [{ key: "happened_at", label: "When", icon: Calendar, type: "date" }],
 };
 
 const typeMeta = {
@@ -26,22 +20,17 @@ const typeMeta = {
   voice: { icon: Mic, label: "Voice note" },
 };
 
-function formatDuration(s) {
-  const m = Math.floor(s / 60);
-  const sec = Math.floor(s % 60);
-  return `${m}:${sec.toString().padStart(2, "0")}`;
-}
-
-export default function ReviewStep({ keepType, data, onKeep }) {
+export default function ReviewStep({ keepType, data, onKeep, saving }) {
+  const { data: circles, isLoading } = useCircles();
   const [circleId, setCircleId] = useState(data.circle_id || "");
   const [fields, setFields] = useState({
     happened_at: data.happened_at || "",
-    people: data.people || "",
     milestone_tag: data.milestone_tag || "",
   });
   const [activeChips, setActiveChips] = useState({});
 
-  const canKeep = circleId !== "";
+  const selectedCircle = circles?.find((c) => c.id === circleId);
+  const canKeep = circleId !== "" && !saving;
   const optionals = optionalFields[keepType] || [];
   const TypeIcon = typeMeta[keepType]?.icon;
 
@@ -50,7 +39,11 @@ export default function ReviewStep({ keepType, data, onKeep }) {
   };
 
   const handleKeep = () => {
-    onKeep({ circle_id: circleId, ...fields });
+    onKeep({
+      circle_id: circleId,
+      circle_member_ids: selectedCircle?.member_user_ids || [],
+      ...fields,
+    });
   };
 
   return (
@@ -60,7 +53,7 @@ export default function ReviewStep({ keepType, data, onKeep }) {
         <p className="text-muted-foreground text-sm mt-1">Review and pick where to keep it</p>
 
         {/* Preview card */}
-        <div className="mt-5 rounded-full bg-card border border-border/60 p-4">
+        <div className="mt-5 rounded-2xl bg-card border border-border/60 p-4">
           <div className="flex items-center gap-2 mb-3">
             <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
               {TypeIcon && <TypeIcon className="w-4 h-4 text-primary" />}
@@ -74,9 +67,7 @@ export default function ReviewStep({ keepType, data, onKeep }) {
             <p className="font-semibold text-[15px] mb-1">{data.title}</p>
           )}
 
-          {data.text && (
-            <p className="text-[15px] leading-relaxed">{data.text}</p>
-          )}
+          {data.text && <p className="text-[15px] leading-relaxed">{data.text}</p>}
 
           {data.context && (
             <p className="text-xs text-muted-foreground mt-3 italic">{data.context}</p>
@@ -92,8 +83,12 @@ export default function ReviewStep({ keepType, data, onKeep }) {
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
             Post to Circle <span className="text-destructive">*</span>
           </p>
-          {mockCircles.length === 0 ? (
-            <div className="rounded-full bg-muted/50 p-4 text-center">
+          {isLoading ? (
+            <div className="flex justify-center py-4">
+              <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+            </div>
+          ) : !circles || circles.length === 0 ? (
+            <div className="rounded-2xl bg-muted/50 p-4 text-center">
               <p className="text-sm text-muted-foreground">You need a Circle first</p>
               <Link to="/circles" className="text-sm text-primary font-medium mt-1 inline-block">
                 Create a Circle
@@ -101,12 +96,12 @@ export default function ReviewStep({ keepType, data, onKeep }) {
             </div>
           ) : (
             <div className="space-y-2">
-              {mockCircles.map((c) => (
+              {circles.map((c) => (
                 <button
                   key={c.id}
                   onClick={() => setCircleId(c.id)}
                   className={cn(
-                    "w-full flex items-center gap-3 p-3 rounded-full border transition-all text-left",
+                    "w-full flex items-center gap-3 p-3 rounded-2xl border transition-all text-left",
                     circleId === c.id
                       ? "border-primary bg-primary/5"
                       : "border-border/60 bg-card hover:bg-muted/30"
@@ -117,7 +112,9 @@ export default function ReviewStep({ keepType, data, onKeep }) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{c.name}</p>
-                    <p className="text-xs text-muted-foreground">{c.members.length} members</p>
+                    <p className="text-xs text-muted-foreground">
+                      {(c.member_user_ids || []).length} members
+                    </p>
                   </div>
                   {circleId === c.id && (
                     <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0">
@@ -182,9 +179,9 @@ export default function ReviewStep({ keepType, data, onKeep }) {
 
       <div className="sticky bottom-0 px-5 pb-[calc(max(env(safe-area-inset-bottom),16px)+72px)] pt-3 bg-gradient-to-t from-background via-background/95 to-transparent">
         <Button className="w-full" size="lg" disabled={!canKeep} onClick={handleKeep}>
-          Keep it
+          {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Keep it"}
         </Button>
-        {!canKeep && (
+        {!canKeep && !saving && (
           <p className="text-center text-xs text-muted-foreground mt-2">
             Pick a Circle to keep this
           </p>

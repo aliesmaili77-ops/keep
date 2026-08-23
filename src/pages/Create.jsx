@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, Check, Loader2 } from "lucide-react";
 import ContentScreen from "@/components/create/ContentScreen";
 import ReviewStep from "@/components/create/ReviewStep";
+import { base44 } from "@/api/base44Client";
+import { useInvalidateKeeps } from "@/hooks/useKeeps";
 
 export default function Create() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(0); // 0: content, 1: review, 2: success
+  const invalidateKeeps = useInvalidateKeeps();
+  const [step, setStep] = useState(0);
   const [data, setData] = useState({});
+  const [saving, setSaving] = useState(false);
 
   const handleContentContinue = (content) => {
     const keepType = content.title ? "memory" : "quote";
@@ -15,10 +19,30 @@ export default function Create() {
     setStep(1);
   };
 
-  const handleKeep = (reviewData) => {
-    setData((prev) => ({ ...prev, ...reviewData }));
-    setStep(2);
-    setTimeout(() => navigate("/"), 1500);
+  const handleKeep = async (reviewData) => {
+    setSaving(true);
+    try {
+      const payload = {
+        circle_id: reviewData.circle_id,
+        keep_type: data.keepType,
+        text: data.text,
+        title: data.title || undefined,
+        speaker_name: data.speaker_name || undefined,
+        context: data.context || undefined,
+        happened_at: reviewData.happened_at || undefined,
+        milestone_tag: reviewData.milestone_tag || undefined,
+        status: "active",
+        circle_member_ids: reviewData.circle_member_ids,
+      };
+      await base44.entities.Keep.create(payload);
+      invalidateKeeps();
+      setData((prev) => ({ ...prev, ...reviewData }));
+      setStep(2);
+      setTimeout(() => navigate("/"), 1500);
+    } catch (e) {
+      console.error("Failed to keep", e);
+      setSaving(false);
+    }
   };
 
   const handleBack = () => {
@@ -46,12 +70,14 @@ export default function Create() {
           className="w-9 h-9 flex items-center justify-center -ml-2 text-muted-foreground hover:text-foreground transition-colors"
           aria-label="Back"
         >
-          <ArrowLeft className="w-5 h-5" />
+          {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowLeft className="w-5 h-5" />}
         </button>
       </div>
 
       {step === 0 && <ContentScreen initialData={data} onContinue={handleContentContinue} />}
-      {step === 1 && <ReviewStep keepType={data.keepType} data={data} onKeep={handleKeep} />}
+      {step === 1 && (
+        <ReviewStep keepType={data.keepType} data={data} onKeep={handleKeep} saving={saving} />
+      )}
     </div>
   );
 }

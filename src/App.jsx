@@ -20,6 +20,7 @@ import Create from '@/pages/Create';
 import Memories from '@/pages/Memories';
 import Profile from '@/pages/Profile';
 import KeepDetail from '@/pages/KeepDetail';
+import CircleDetail from '@/pages/CircleDetail';
 import Privacy from '@/pages/Privacy';
 import Terms from '@/pages/Terms';
 
@@ -61,6 +62,7 @@ const AuthenticatedApp = () => {
           <Route path="/memories" element={<Memories />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/keep/:id" element={<KeepDetail />} />
+          <Route path="/circle/:id" element={<CircleDetail />} />
         </Route>
       </Route>
 
