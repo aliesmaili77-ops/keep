@@ -15,7 +15,7 @@ export function useInvalidateReactions() {
 }
 
 export function useToggleReaction() {
-  const invalidate = useInvalidateReactions();
+  const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ keepId, circleId, type, circleMemberIds, existingId }) => {
       if (existingId) {
@@ -30,6 +30,31 @@ export function useToggleReaction() {
       });
       return { created: true };
     },
-    onSuccess: () => invalidate(),
+    onMutate: async ({ keepId, type, existingId }) => {
+      await qc.cancelQueries({ queryKey: ["reactions", keepId] });
+      const previousData = qc.getQueryData(["reactions", keepId]);
+      if (previousData) {
+        if (existingId) {
+          qc.setQueryData(
+            ["reactions", keepId],
+            previousData.filter((r) => r.id !== existingId)
+          );
+        } else {
+          qc.setQueryData(["reactions", keepId], [
+            ...previousData,
+            { id: "temp-" + Date.now(), keep_id: keepId, reaction_type: type, created_by_id: "me" },
+          ]);
+        }
+      }
+      return { previousData };
+    },
+    onError: (_err, vars, context) => {
+      if (context?.previousData) {
+        qc.setQueryData(["reactions", vars.keepId], context.previousData);
+      }
+    },
+    onSettled: (_data, _err, vars) => {
+      qc.invalidateQueries({ queryKey: ["reactions", vars.keepId] });
+    },
   });
 }

@@ -86,8 +86,26 @@
     @apply border-border outline-ring/50;
   }
 
+  html, body {
+    overscroll-behavior-y: none;
+  }
+
   body {
     @apply bg-background text-foreground font-body;
+  }
+
+  /* Native feel: no tap highlight, no selection, no double-tap zoom on nav UI */
+  button, a, [role="button"], nav, header {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+
+  /* Keep content and comments remain selectable */
+  main {
+    user-select: text;
+    -webkit-user-select: text;
   }
 }
 

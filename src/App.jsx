@@ -10,6 +10,7 @@ import ScrollToTop from './components/ScrollToTop';
 import { Navigate } from 'react-router-dom';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AppShell from '@/components/AppShell';
+import AnimatedOutlet from '@/components/AnimatedOutlet';
 import Welcome from '@/pages/Welcome';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
@@ -61,15 +62,17 @@ const AuthenticatedApp = () => {
       {/* Protected routes */}
       <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/welcome" replace />} />}>
         <Route element={<AppShell />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/circles" element={<Circles />} />
-          <Route path="/people" element={<People />} />
-          <Route path="/create" element={<Create />} />
-          <Route path="/memories" element={<Memories />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/keep/:id" element={<KeepDetail />} />
-          <Route path="/circle/:id" element={<CircleDetail />} />
+          <Route element={<AnimatedOutlet />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/circles" element={<Circles />} />
+            <Route path="/people" element={<People />} />
+            <Route path="/create" element={<Create />} />
+            <Route path="/memories" element={<Memories />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/keep/:id" element={<KeepDetail />} />
+            <Route path="/circle/:id" element={<CircleDetail />} />
+          </Route>
         </Route>
       </Route>
 

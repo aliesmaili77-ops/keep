@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Home, Plus, User, History } from "lucide-react";
 import { cn } from "@/lib/utils";
 import CirclesIcon from "@/components/CirclesIcon";
@@ -14,6 +14,7 @@ const items = [
 
 export default function BottomNav() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [scrollHidden, setScrollHidden] = useState(false);
   const [commentHidden, setCommentHidden] = useState(false);
   const hidden = scrollHidden || commentHidden;
@@ -64,13 +65,20 @@ export default function BottomNav() {
     >
       <div className="glass flex items-center gap-2 rounded-full px-2 py-1.5">
         {items.map((item) => {
-          const active = location.pathname === item.to;
+          const active =
+            item.to === "/"
+              ? location.pathname === "/"
+              : location.pathname === item.to || location.pathname.startsWith(item.to + "/");
           const Icon = item.icon;
+          const handleClick = (e) => {
+            e.preventDefault();
+            navigate(item.to);
+          };
           if (item.primary) {
             return (
-              <NavLink
+              <button
                 key={item.to}
-                to={item.to}
+                onClick={handleClick}
                 aria-label={item.label}
                 className="flex items-center justify-center w-11 h-11 rounded-full bg-primary text-primary-foreground transition-transform active:scale-95 mx-0.5"
                 style={{
@@ -79,13 +87,13 @@ export default function BottomNav() {
                 }}
               >
                 <Icon className="w-5 h-5" strokeWidth={2.2} />
-              </NavLink>
+              </button>
             );
           }
           return (
-            <NavLink
+            <button
               key={item.to}
-              to={item.to}
+              onClick={handleClick}
               aria-label={item.label}
               aria-current={active ? "page" : undefined}
               className={cn(
@@ -94,7 +102,7 @@ export default function BottomNav() {
               )}
             >
               <Icon className="w-[18px] h-[18px]" strokeWidth={active ? 2.4 : 2} />
-            </NavLink>
+            </button>
           );
         })}
       </div>
