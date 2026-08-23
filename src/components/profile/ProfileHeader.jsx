@@ -2,12 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@/components/Avatar";
 import { Button } from "@/components/ui/button";
-import { useUnreadCount } from "@/hooks/useNotifications";
-import { Calendar, Pencil, Bell } from "lucide-react";
+import { Calendar, Pencil } from "lucide-react";
 
 export default function ProfileHeader({ user, stats }) {
   const navigate = useNavigate();
-  const unreadCount = useUnreadCount();
   const displayName = user?.display_name || user?.full_name || user?.email?.split("@")[0] || "You";
   const joinedDate = user?.created_date
     ? new Date(user.created_date).toLocaleDateString("en-US", { month: "short", year: "numeric" })
@@ -17,20 +15,6 @@ export default function ProfileHeader({ user, stats }) {
 
   return (
     <div className="px-4 pt-14 pb-2">
-      <div className="flex justify-end mb-3">
-        <button
-          onClick={() => navigate("/notifications")}
-          className="relative w-9 h-9 rounded-full glass-tight flex items-center justify-center active:scale-90 transition-transform"
-          aria-label="Notifications"
-        >
-          <Bell className="w-5 h-5" />
-          {unreadCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 min-w-4 h-4 px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
-              {unreadCount > 9 ? "9+" : unreadCount}
-            </span>
-          )}
-        </button>
-      </div>
       <div className="glass rounded-3xl p-5">
         {/* Avatar + stats */}
         <div className="flex items-center gap-5">

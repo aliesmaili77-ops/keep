@@ -5,6 +5,7 @@ import KeepCard from "@/components/keep/KeepCard";
 import { useKeeps } from "@/hooks/useKeeps";
 import { useCircles } from "@/hooks/useCircles";
 import EmptyState from "@/components/common/EmptyState";
+import NotificationsSection from "@/components/notifications/NotificationsSection";
 import { Sparkles, Loader2, Bookmark } from "lucide-react";
 import { formatKeepDate } from "@/lib/keepUtils";
 
@@ -29,6 +30,8 @@ export default function Home() {
           Recent memories from all your Circles
         </p>
       </div>
+
+      <NotificationsSection />
 
       {isLoading ? (
         <div className="flex justify-center py-16">

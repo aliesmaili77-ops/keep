@@ -21,7 +21,6 @@ import People from '@/pages/People';
 import Create from '@/pages/Create';
 import Memories from '@/pages/Memories';
 import Profile from '@/pages/Profile';
-import Notifications from '@/pages/Notifications';
 import KeepDetail from '@/pages/KeepDetail';
 import CircleDetail from '@/pages/CircleDetail';
 import Invite from '@/pages/Invite';
@@ -67,7 +66,6 @@ const AuthenticatedApp = () => {
           <Route path="/create" element={<Create />} />
           <Route path="/memories" element={<Memories />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/notifications" element={<Notifications />} />
           <Route path="/keep/:id" element={<KeepDetail />} />
           <Route path="/circle/:id" element={<CircleDetail />} />
         </Route>
