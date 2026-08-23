@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import SettingsList from "@/components/profile/SettingsList";
 import KeepsGrid from "@/components/profile/KeepsGrid";
+import { useTheme } from "@/hooks/useTheme";
 import {
   Bell,
   Shield,
@@ -22,7 +23,7 @@ import {
 export default function Profile() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [darkMode, setDarkMode] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
 
   const stats = [
     { label: "Keeps", value: 23 },
@@ -55,8 +56,9 @@ export default function Profile() {
     {
       label: "Dark mode",
       icon: Moon,
-      trailing: darkMode ? "On" : "Off",
-      onClick: () => setDarkMode((v) => !v),
+      toggle: true,
+      toggleValue: isDark,
+      onToggle: toggleTheme,
     },
   ];
 

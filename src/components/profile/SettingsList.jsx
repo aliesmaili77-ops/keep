@@ -1,5 +1,6 @@
 import React from "react";
 import { ChevronRight } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
 export default function SettingsList({ title, items }) {
@@ -10,12 +11,10 @@ export default function SettingsList({ title, items }) {
       </p>
       <div className="mx-4 rounded-2xl bg-card border border-border/60 overflow-hidden">
         {items.map((item, i) => (
-          <button
+          <div
             key={i}
-            onClick={item.onClick}
-            disabled={item.disabled}
             className={cn(
-              "w-full flex items-center gap-3 px-3.5 py-2.5 text-left transition-colors",
+              "w-full flex items-center gap-3 px-3.5 py-2.5",
               i > 0 && "border-t border-border/40",
               item.danger
                 ? "hover:bg-destructive/5"
@@ -47,11 +46,21 @@ export default function SettingsList({ title, items }) {
                 <p className="text-xs text-muted-foreground truncate mt-0.5">{item.subtext}</p>
               )}
             </div>
-            {item.trailing !== undefined ? (
-              <span className="text-sm text-muted-foreground shrink-0">{item.trailing}</span>
-            ) : null}
-            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
-          </button>
+            {item.toggle ? (
+              <Switch
+                checked={item.toggleValue}
+                onCheckedChange={item.onToggle}
+                className="shrink-0"
+              />
+            ) : (
+              <>
+                {item.trailing !== undefined ? (
+                  <span className="text-sm text-muted-foreground shrink-0">{item.trailing}</span>
+                ) : null}
+                <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+              </>
+            )}
+          </div>
         ))}
       </div>
     </div>
