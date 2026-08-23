@@ -19,6 +19,7 @@ import {
   Plus,
   CheckCircle2,
   Mail,
+  Link as LinkIcon,
 } from "lucide-react";
 
 const typeOptions = [
@@ -271,6 +272,26 @@ export default function InviteSheet({ open, onOpenChange, circle: fixedCircle })
               {emails.length > 0
                 ? `Continue with ${emails.length} ${emails.length === 1 ? "person" : "people"}`
                 : "Continue"}
+            </button>
+
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-px bg-border/50" />
+              <span className="text-xs text-muted-foreground">or</span>
+              <div className="flex-1 h-px bg-border/50" />
+            </div>
+
+            <button
+              onClick={() => setStep("circle")}
+              className="w-full glass-tight rounded-2xl px-4 py-3.5 flex items-center gap-3 active:scale-[0.98] transition-transform text-left"
+            >
+              <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                <LinkIcon className="w-4.5 h-4.5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium">Share a link, code, or QR</p>
+                <p className="text-xs text-muted-foreground">Create a Circle to get your share options</p>
+              </div>
+              <ArrowLeft className="w-4 h-4 text-muted-foreground rotate-180 shrink-0" />
             </button>
           </div>
         )}
