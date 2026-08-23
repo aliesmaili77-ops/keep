@@ -62,13 +62,7 @@ export default function BottomNav() {
       style={{ bottom: "max(env(safe-area-inset-bottom), 12px)" }}
       aria-label="Main navigation"
     >
-      <div
-        className="flex items-center gap-2 rounded-full border border-white/30 bg-gradient-to-b from-white/50 to-white/20 backdrop-blur-2xl backdrop-saturate-150 px-2 py-1.5"
-        style={{
-          boxShadow:
-            "0 8px 32px -8px rgba(0,0,0,0.15), inset 0 1px 1px rgba(255,255,255,0.4)",
-        }}
-      >
+      <div className="glass flex items-center gap-2 rounded-full px-2 py-1.5">
         {items.map((item) => {
           const active = location.pathname === item.to;
           const Icon = item.icon;
