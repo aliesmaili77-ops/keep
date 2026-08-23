@@ -33,9 +33,15 @@ export default function Invite() {
     const accept = async () => {
       try {
         const res = await base44.functions.invoke("acceptInvite", { token });
-        setCircle(res.data.circle);
-        setConnection(res.data.connection);
-        setStatus(res.data.alreadyMember ? "already" : "success");
+        const { circle, connection } = res.data;
+        // Deep link directly to the right page
+        if (circle) {
+          navigate(`/circle/${circle.id}`, { replace: true });
+        } else if (connection) {
+          navigate("/people", { replace: true });
+        } else {
+          navigate("/", { replace: true });
+        }
       } catch (e) {
         const msg = e?.response?.data?.error || e?.message || "Something went wrong";
         setErrorMsg(msg);
