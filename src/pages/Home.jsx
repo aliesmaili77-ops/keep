@@ -5,8 +5,8 @@ import KeepCard from "@/components/keep/KeepCard";
 import { useKeeps } from "@/hooks/useKeeps";
 import { useCircles } from "@/hooks/useCircles";
 import EmptyState from "@/components/common/EmptyState";
-import NotificationsSection from "@/components/notifications/NotificationsSection";
-import { Sparkles, Loader2, Bookmark } from "lucide-react";
+import { useUnreadCount } from "@/hooks/useNotifications";
+import { Sparkles, Loader2, Bookmark, Bell } from "lucide-react";
 import { formatKeepDate } from "@/lib/keepUtils";
 
 export default function Home() {
@@ -14,6 +14,7 @@ export default function Home() {
   const { user } = useAuth();
   const { data: keeps, isLoading } = useKeeps();
   const { data: circles } = useCircles();
+  const unreadCount = useUnreadCount();
 
   const circleMap = {};
   circles?.forEach((c) => {
@@ -24,14 +25,26 @@ export default function Home() {
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="px-5 pt-14 pb-2">
-        <h1 className="text-xl font-semibold tracking-tight">Keeps</h1>
-        <p className="text-muted-foreground text-sm mt-0.5">
-          Recent memories from all your Circles
-        </p>
+      <div className="px-5 pt-14 pb-2 flex items-start justify-between">
+        <div>
+          <h1 className="text-xl font-semibold tracking-tight">Keeps</h1>
+          <p className="text-muted-foreground text-sm mt-0.5">
+            Recent memories from all your Circles
+          </p>
+        </div>
+        <button
+          onClick={() => navigate("/notifications")}
+          className="relative w-9 h-9 rounded-full glass-tight flex items-center justify-center active:scale-90 transition-transform shrink-0"
+          aria-label="Notifications"
+        >
+          <Bell className="w-5 h-5" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 min-w-4 h-4 px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
+        </button>
       </div>
-
-      <NotificationsSection />
 
       {isLoading ? (
         <div className="flex justify-center py-16">
