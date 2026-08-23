@@ -16,6 +16,7 @@ import {
   User,
   Trash2,
   MessageCircle,
+  Search,
 } from "lucide-react";
 
 export default function Profile() {
@@ -70,7 +71,19 @@ export default function Profile() {
       <ProfileHeader user={user} stats={stats} />
       <KeepsGrid />
 
-      <div className="mt-6">
+      {/* Search */}
+      <div className="mt-6 mx-4">
+        <div className="flex items-center gap-2 rounded-full bg-muted/60 border border-border/40 px-4 py-2.5">
+          <Search className="w-4 h-4 text-muted-foreground shrink-0" />
+          <input
+            type="text"
+            placeholder="Search settings"
+            className="flex-1 bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none"
+          />
+        </div>
+      </div>
+
+      <div className="mt-2">
         <SettingsList title="Account" items={accountItems} />
         <SettingsList title="Notifications" items={notificationItems} />
         <SettingsList title="Privacy & Safety" items={privacyItems} />
