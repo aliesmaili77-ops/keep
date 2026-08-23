@@ -17,7 +17,7 @@ export default function Home() {
       {/* Resurfacing */}
       <button
         onClick={() => navigate(`/keep/${resurfacedKeep.id}`)}
-        className="mx-5 mt-3 flex items-center gap-3 w-[calc(100%-2.5rem)] px-4 py-3 rounded-full bg-muted/40 border border-border/50 text-left hover:bg-muted/60 transition-colors"
+        className="mx-5 mt-3 flex items-center gap-3 w-[calc(100%-2.5rem)] px-4 py-3 rounded-2xl backdrop-blur-xl bg-primary/10 border border-primary/20 text-left hover:bg-primary/15 transition-colors shadow-sm"
         aria-label="Remember this? An old keep from The Boys"
       >
         <Sparkles className="w-4 h-4 text-primary shrink-0" />

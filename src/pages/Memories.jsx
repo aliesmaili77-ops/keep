@@ -15,7 +15,7 @@ export default function Memories() {
       </div>
 
       {/* Featured resurfacing */}
-      <div className="mx-5 mt-3 rounded-full bg-primary/5 border border-primary/20 px-4 py-4">
+      <div className="mx-5 mt-3 rounded-2xl backdrop-blur-xl bg-primary/10 border border-primary/20 px-4 py-4 shadow-sm">
         <div className="flex items-center gap-1.5 mb-2">
           <Sparkles className="w-4 h-4 text-primary" />
           <p className="text-xs font-semibold text-primary uppercase tracking-wide">Remember this?</p>
