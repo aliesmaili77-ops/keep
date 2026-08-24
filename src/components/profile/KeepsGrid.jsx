@@ -40,9 +40,12 @@ export default function KeepsGrid() {
     );
   }
 
+  const visibleKeeps = keeps.slice(0, 4);
+
   return (
-    <div className="grid grid-cols-2 gap-2.5 px-4 mt-4">
-      {keeps.map((keep) => {
+    <div className="px-4 mt-4">
+      <div className="grid grid-cols-2 gap-2.5">
+        {visibleKeeps.map((keep) => {
         const Icon = typeIcon[keep.keep_type] || Quote;
         return (
           <MotionCard
@@ -65,6 +68,15 @@ export default function KeepsGrid() {
           </MotionCard>
         );
       })}
+      </div>
+      {keeps.length > 4 && (
+        <button
+          onClick={() => navigate("/memories")}
+          className="w-full text-center text-sm text-primary font-medium py-3 mt-1"
+        >
+          See all keeps
+        </button>
+      )}
     </div>
   );
 }
