@@ -94,7 +94,12 @@ export default function BottomNav() {
           const Icon = item.icon;
           const handleClick = (e) => {
             e.preventDefault();
-            navigate(tabRoutes.current[item.to] || item.to);
+            if (active) {
+              delete tabRoutes.current[item.to];
+              navigate(item.to);
+            } else {
+              navigate(tabRoutes.current[item.to] || item.to);
+            }
           };
           if (item.primary) {
             return (
@@ -121,7 +126,7 @@ export default function BottomNav() {
               aria-current={active ? "page" : undefined}
               whileTap={reduced ? undefined : { scale: 0.88 }}
               className={cn(
-                "relative flex items-center justify-center w-10 h-10 rounded-full transition-colors",
+                "relative flex items-center justify-center w-11 h-11 rounded-full transition-colors",
                 active ? "text-primary" : "text-muted-foreground"
               )}
             >

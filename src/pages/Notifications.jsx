@@ -7,6 +7,8 @@ import {
 } from "@/hooks/useNotifications";
 import Avatar from "@/components/Avatar";
 import EmptyState from "@/components/common/EmptyState";
+import PullToRefresh from "@/components/common/PullToRefresh";
+import { useQueryClient } from "@tanstack/react-query";
 import { Bell, ArrowLeft } from "lucide-react";
 
 function resolveNotificationRoute(notification) {
@@ -31,6 +33,7 @@ function resolveNotificationRoute(notification) {
 export default function Notifications() {
   const navigate = useNavigate();
   const { data: notifications, isLoading } = useNotifications();
+  const queryClient = useQueryClient();
   const markRead = useMarkNotificationRead();
   const markAllRead = useMarkAllNotificationsRead();
 
@@ -49,7 +52,8 @@ export default function Notifications() {
 
   return (
     <div className="max-w-md mx-auto pb-32">
-      <div className="px-5 pt-14 pb-2 flex items-center justify-between">
+      <PullToRefresh onRefresh={() => queryClient.invalidateQueries({ queryKey: ["notifications"] })}>
+      <div className="px-5 pt-[max(env(safe-area-inset-top),1rem)] pb-2 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate(-1)}
@@ -124,6 +128,7 @@ export default function Notifications() {
           ))}
         </div>
       )}
+      </PullToRefresh>
     </div>
   );
 }

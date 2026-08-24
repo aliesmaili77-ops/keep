@@ -3,7 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/AuthContext";
 import { useCircles, useInvalidateCircles } from "@/hooks/useCircles";
 import { useCircleMembers, useInvalidateCircleMembers } from "@/hooks/useCircleMembers";
-import { useKeeps } from "@/hooks/useKeeps";
+import { useKeeps, useInvalidateKeeps } from "@/hooks/useKeeps";
+import PullToRefresh from "@/components/common/PullToRefresh";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import Avatar from "@/components/Avatar";
@@ -28,6 +29,7 @@ export default function CircleDetail() {
   const { data: keeps, isLoading: keepsLoading } = useKeeps(id);
   const invalidateCircles = useInvalidateCircles();
   const invalidateMembers = useInvalidateCircleMembers();
+  const invalidateKeeps = useInvalidateKeeps();
   const [busy, setBusy] = useState(null);
   const [inviteOpen, setInviteOpen] = useState(false);
 
@@ -176,6 +178,7 @@ export default function CircleDetail() {
       </div>
 
       {/* Keeps in this circle */}
+      <PullToRefresh onRefresh={invalidateKeeps}>
       <div className="mt-6">
         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide px-5 mb-2">
           Keeps
@@ -202,6 +205,7 @@ export default function CircleDetail() {
           ))
         )}
       </div>
+      </PullToRefresh>
       <InviteSheet open={inviteOpen} onOpenChange={setInviteOpen} circle={circle} />
     </div>
   );

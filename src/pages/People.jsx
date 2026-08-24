@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { usePeople } from "@/hooks/usePeople";
+import { useQueryClient } from "@tanstack/react-query";
+import PullToRefresh from "@/components/common/PullToRefresh";
 import { useCircles } from "@/hooks/useCircles";
 import Avatar from "@/components/Avatar";
 import EmptyState from "@/components/common/EmptyState";
@@ -12,6 +14,7 @@ export default function People() {
   const { user } = useAuth();
   const { data: people, isLoading } = usePeople();
   const { data: circles } = useCircles();
+  const queryClient = useQueryClient();
   const [inviteOpen, setInviteOpen] = useState(false);
 
   const circleNameMap = new Map((circles || []).map((c) => [c.id, c.name]));
@@ -19,7 +22,8 @@ export default function People() {
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="px-5 pt-14 pb-2 flex items-center justify-between">
+      <PullToRefresh onRefresh={() => queryClient.invalidateQueries({ queryKey: ["people"] })}>
+      <div className="px-5 pt-[max(env(safe-area-inset-top),1rem)] pb-2 flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold tracking-tight">People</h1>
           <p className="text-muted-foreground text-sm mt-0.5">Your connections</p>
@@ -85,6 +89,8 @@ export default function People() {
           })}
         </div>
       )}
+
+      </PullToRefresh>
 
       <InviteSheet open={inviteOpen} onOpenChange={setInviteOpen} />
     </div>
