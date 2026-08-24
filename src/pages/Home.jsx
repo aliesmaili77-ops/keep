@@ -2,7 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/AuthContext";
 import KeepCard from "@/components/keep/KeepCard";
-import { useKeeps } from "@/hooks/useKeeps";
+import { useKeeps, useInvalidateKeeps } from "@/hooks/useKeeps";
+import PullToRefresh from "@/components/common/PullToRefresh";
 import { useCircles } from "@/hooks/useCircles";
 import EmptyState from "@/components/common/EmptyState";
 import { useUnreadCount } from "@/hooks/useNotifications";
@@ -13,6 +14,7 @@ export default function Home() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { data: keeps, isLoading } = useKeeps();
+  const invalidateKeeps = useInvalidateKeeps();
   const { data: circles } = useCircles();
   const unreadCount = useUnreadCount();
 
@@ -25,7 +27,8 @@ export default function Home() {
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="px-5 pt-14 pb-2 flex items-start justify-between">
+      <PullToRefresh onRefresh={invalidateKeeps}>
+      <div className="px-5 pt-[max(env(safe-area-inset-top),1rem)] pb-2 flex items-start justify-between">
         <div>
           <h1 className="text-xl font-semibold tracking-tight">Keeps</h1>
           <p className="text-muted-foreground text-sm mt-0.5">
@@ -87,6 +90,7 @@ export default function Home() {
           </div>
         </>
       )}
+      </PullToRefresh>
     </div>
   );
 }

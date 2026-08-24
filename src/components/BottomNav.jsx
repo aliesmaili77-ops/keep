@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { Home, Plus, User, History } from "lucide-react";
@@ -6,6 +6,15 @@ import { cn } from "@/lib/utils";
 import CirclesIcon from "@/components/CirclesIcon";
 
 const springPill = { type: "spring", stiffness: 400, damping: 32 };
+
+const tabForPath = (path) => {
+  if (path === "/") return "/";
+  if (path.startsWith("/circles") || path.startsWith("/circle/")) return "/circles";
+  if (path.startsWith("/create")) return "/create";
+  if (path.startsWith("/memories")) return "/memories";
+  if (path.startsWith("/profile")) return "/profile";
+  return null;
+};
 
 const items = [
   { to: "/", icon: Home, label: "Home" },
@@ -19,6 +28,7 @@ export default function BottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
   const reduced = useReducedMotion();
+  const tabRoutes = useRef({});
   const [scrollHidden, setScrollHidden] = useState(false);
   const [commentHidden, setCommentHidden] = useState(false);
   const hidden = scrollHidden || commentHidden;
@@ -58,6 +68,14 @@ export default function BottomNav() {
     setScrollHidden(false);
   }, [location.pathname]);
 
+  // Store last visited subroute per tab
+  useEffect(() => {
+    const tab = tabForPath(location.pathname);
+    if (tab) {
+      tabRoutes.current[tab] = location.pathname;
+    }
+  }, [location.pathname]);
+
   return (
     <nav
       className={cn(
@@ -76,7 +94,7 @@ export default function BottomNav() {
           const Icon = item.icon;
           const handleClick = (e) => {
             e.preventDefault();
-            navigate(item.to);
+            navigate(tabRoutes.current[item.to] || item.to);
           };
           if (item.primary) {
             return (

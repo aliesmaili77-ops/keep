@@ -135,7 +135,7 @@ export default function KeepDetail() {
   return (
     <div className="min-h-screen flex flex-col max-w-md mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 pt-[max(env(safe-area-inset-top),12px)] pb-2">
+      <div className="flex items-center justify-between px-5 pt-[max(env(safe-area-inset-top),1rem)] pb-2">
         <button
           onClick={() => navigate(-1)}
           className="w-9 h-9 flex items-center justify-center -ml-2 text-muted-foreground hover:text-foreground transition-colors"

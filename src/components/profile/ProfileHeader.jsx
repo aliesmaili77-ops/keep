@@ -14,7 +14,7 @@ export default function ProfileHeader({ user, stats, onEdit }) {
   const statRoutes = { Keeps: "/memories", People: "/people" };
 
   return (
-    <div className="px-4 pt-14 pb-2">
+    <div className="px-4 pt-[max(env(safe-area-inset-top),1rem)] pb-2">
       <div className="glass rounded-3xl p-5">
         {/* Avatar + stats */}
         <div className="flex items-center gap-5">

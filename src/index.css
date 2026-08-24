@@ -107,6 +107,12 @@
     user-select: text;
     -webkit-user-select: text;
   }
+
+  /* Prevent scroll chaining in nested scroll containers */
+  [class*="overflow-y-auto"],
+  [class*="overflow-y-scroll"] {
+    overscroll-behavior-y: contain;
+  }
 }
 
 @layer components {

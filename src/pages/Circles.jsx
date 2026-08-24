@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@/components/Avatar";
-import { useCircles } from "@/hooks/useCircles";
+import { useCircles, useInvalidateCircles } from "@/hooks/useCircles";
+import PullToRefresh from "@/components/common/PullToRefresh";
 import EmptyState from "@/components/common/EmptyState";
 import CreateCircleSheet from "@/components/circles/CreateCircleSheet";
 import InviteSheet from "@/components/circles/InviteSheet";
@@ -18,12 +19,14 @@ const typeLabels = {
 export default function Circles() {
   const navigate = useNavigate();
   const { data: circles, isLoading } = useCircles();
+  const invalidateCircles = useInvalidateCircles();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="px-5 pt-14 pb-2 flex items-center justify-between">
+      <PullToRefresh onRefresh={invalidateCircles}>
+      <div className="px-5 pt-[max(env(safe-area-inset-top),1rem)] pb-2 flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold tracking-tight">Circles</h1>
           <p className="text-muted-foreground text-sm mt-0.5">Your private spaces</p>
@@ -83,6 +86,7 @@ export default function Circles() {
           ))}
         </div>
       )}
+      </PullToRefresh>
 
       <CreateCircleSheet
         open={sheetOpen}

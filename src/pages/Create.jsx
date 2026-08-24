@@ -64,7 +64,7 @@ export default function Create() {
 
   return (
     <div className="min-h-screen flex flex-col max-w-md mx-auto">
-      <div className="flex items-center px-5 pt-[max(env(safe-area-inset-top),12px)] pb-2">
+      <div className="flex items-center px-5 pt-[max(env(safe-area-inset-top),1rem)] pb-2">
         <button
           onClick={handleBack}
           className="w-9 h-9 flex items-center justify-center -ml-2 text-muted-foreground hover:text-foreground transition-colors"

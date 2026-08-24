@@ -2,7 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/AuthContext";
 import KeepCard from "@/components/keep/KeepCard";
-import { useKeeps } from "@/hooks/useKeeps";
+import { useKeeps, useInvalidateKeeps } from "@/hooks/useKeeps";
+import PullToRefresh from "@/components/common/PullToRefresh";
 import { useCircles } from "@/hooks/useCircles";
 import EmptyState from "@/components/common/EmptyState";
 import { Sparkles, Loader2, History } from "lucide-react";
@@ -12,6 +13,7 @@ export default function Memories() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { data: keeps, isLoading } = useKeeps();
+  const invalidateKeeps = useInvalidateKeeps();
   const { data: circles } = useCircles();
 
   const circleMap = {};
@@ -24,7 +26,8 @@ export default function Memories() {
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="px-5 pt-14 pb-2">
+      <PullToRefresh onRefresh={invalidateKeeps}>
+      <div className="px-5 pt-[max(env(safe-area-inset-top),1rem)] pb-2">
         <h1 className="text-xl font-semibold tracking-tight">Memories</h1>
         <p className="text-muted-foreground text-sm mt-0.5">Keeps worth revisiting</p>
       </div>
@@ -72,6 +75,7 @@ export default function Memories() {
           </div>
         </>
       )}
+      </PullToRefresh>
     </div>
   );
 }
